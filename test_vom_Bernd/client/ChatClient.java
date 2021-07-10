@@ -98,6 +98,7 @@ public class ChatClient {
         client.frame.setVisible(true);
         client.run();
 
+
         var client2 = new ChatClient(args[0]);
         client2.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         client2.frame.setVisible(true);
