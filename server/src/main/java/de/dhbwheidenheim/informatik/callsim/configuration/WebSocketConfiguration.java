@@ -1,6 +1,6 @@
-package de.dhbwheidenheim.informatik.assfalg.personspring.configuration;
+package de.dhbwheidenheim.informatik.callsim.configuration;
 
-import de.dhbwheidenheim.informatik.assfalg.personspring.controller.PersonWebSocket;
+import de.dhbwheidenheim.informatik.callsim.controller.WebSocket;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,8 +20,8 @@ public class WebSocketConfiguration implements WebSocketConfigurer {
 
 
     @Bean
-    public PersonWebSocket personWebSocket() {
-        return new PersonWebSocket();
+    public WebSocket webSocket() {
+        return new WebSocket();
     }
 
     @Bean

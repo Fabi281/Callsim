@@ -1,6 +1,6 @@
-package de.dhbwheidenheim.informatik.assfalg.personspring.controller;
+package de.dhbwheidenheim.informatik.callsim.controller;
 
-import de.dhbwheidenheim.informatik.assfalg.personspring.model.Person;
+import de.dhbwheidenheim.informatik.callsim.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,10 +15,10 @@ import javax.json.JsonReader;
 import java.io.IOException;
 import java.io.StringReader;
 
-@ServerEndpoint("/person")
-public class PersonWebSocket {
+@ServerEndpoint("/ws")
+public class WebSocket {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(PersonWebSocket.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(WebSocket.class);
     private static final String DataLocation = "./data/Account";
 
 
@@ -36,8 +36,8 @@ public class PersonWebSocket {
 
             switch(action){
                 case "login":
-                    ArrayList<Person> personen = Utils.readFromFile(DataLocation);
-                    boolean exists = personen.stream().filter(p -> (p.getName().equals(jsonMessage.getString("Username")) 
+                    ArrayList<User> users = Utils.readFromFile(DataLocation);
+                    boolean exists = users.stream().filter(p -> (p.getUsername().equals(jsonMessage.getString("Username")) 
                         && p.getPassword().equals(jsonMessage.getString("Password")))).findFirst().isPresent();
                         LOGGER.info("Login Bool: " + exists);
                     if(exists){
@@ -47,8 +47,8 @@ public class PersonWebSocket {
                     }
                     break;
                 case "register":
-                    Person registerPerson = new Person(jsonMessage.getString("Username"), jsonMessage.getString("Password"));
-                    Utils.writeToFile(registerPerson, DataLocation);
+                    User registerUser = new User(jsonMessage.getString("Username"), jsonMessage.getString("Password"));
+                    Utils.writeToFile(registerUser, DataLocation);
                     session.getBasicRemote().sendText("Register erfolgreich");
                     break;
                 default:
