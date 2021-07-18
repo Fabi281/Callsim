@@ -12,7 +12,7 @@ public class User implements Serializable {
 	@Id
 	@GeneratedValue 
 	long id;
-	String Username, Passwort ;
+	String Username, Password;
 
 	public String getUsername() {
 		return Username;
@@ -23,18 +23,18 @@ public class User implements Serializable {
 	}
 
 	public String getPassword() {
-		return Passwort;
+		return Password;
 	}
 
-	public void setPassword(String Passwort) {
-		this.Passwort = Passwort;
+	public void setPassword(String Password) {
+		this.Password = Password;
 	}
 
 
-	public User(String Username, String Passwort) {
+	public User(String Username, String Password) {
 		
 		this.Username = Username;
-		this.Passwort = Passwort;
+		this.Password = Password;
 	}
 	
 	public User() {}
