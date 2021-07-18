@@ -12,7 +12,6 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.WebSocketContainer;
 
-
 @ClientEndpoint
 public class WebsocketClientEndpoint {
 
@@ -51,8 +50,8 @@ public class WebsocketClientEndpoint {
         this.messageHandler = msgHandler;
     }
 
-    public void sendMessage(JsonObject message) {
-        this.userSession.getAsyncRemote().sendObject(message);
+    public void sendMessage(JsonObject json) {
+        this.userSession.getAsyncRemote().sendObject(json);
     }
 
     public static interface MessageHandler {
