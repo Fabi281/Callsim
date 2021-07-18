@@ -7,7 +7,7 @@ To start and test the Application please follow the following Guide (VS-Code):
 
 2. Open another Instance of VS-Code and open the "client" Folder in the "callsim" Folder
 
-3. Start the Server by running the "PersonenApplication.java"
+3. Start the Server by running the "CallSimApplication.java"
 
 4. Start the Client by running "client.java"
 
