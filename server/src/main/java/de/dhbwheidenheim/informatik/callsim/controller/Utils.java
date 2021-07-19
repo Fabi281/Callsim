@@ -15,10 +15,9 @@ import de.dhbwheidenheim.informatik.callsim.model.User;
 public class Utils {
     private static final Logger log = LoggerFactory.getLogger(Utils.class);
 
-    public static void writeToFile(User user, String location) {
+    public static void registerUser(User user, String location) {
 		try {
-
-			ArrayList<User> users = new ArrayList<User>();
+			ArrayList<User> users = readFromFile(location);
 			users.add(user);
 
 			FileOutputStream fos = new FileOutputStream(location);
@@ -50,10 +49,7 @@ public class Utils {
 		}
  
 		log.info("Data loaded successfully from file " + location);
-		for(User u : users){
-			log.info("Username: " + u.getUsername());
-			log.info("Password: " + u.getPassword());
-		}
+		
 
 		return users;
 	}

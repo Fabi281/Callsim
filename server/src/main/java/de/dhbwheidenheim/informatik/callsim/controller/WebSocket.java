@@ -48,7 +48,7 @@ public class WebSocket {
                     break;
                 case "register":
                     User registerUser = new User(jsonMessage.getString("Username"), jsonMessage.getString("Password"));
-                    Utils.writeToFile(registerUser, DataLocation);
+                    Utils.registerUser(registerUser, DataLocation);
                     session.getBasicRemote().sendText("Register erfolgreich");
                     break;
                 default:
