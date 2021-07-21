@@ -1,6 +1,5 @@
 package de.callsim;
 
-
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -13,13 +12,6 @@ public class client {
         try {
             // open websocket
             final WebsocketClientEndpoint clientEndPoint = new WebsocketClientEndpoint(new URI("ws://localhost:8787/ws"));
-
-            // add listener
-            clientEndPoint.addMessageHandler(new WebsocketClientEndpoint.MessageHandler() {
-                public void handleMessage(String message) {
-                    System.out.println(message);
-                }
-            });
 
             JsonObject value = Json.createObjectBuilder()
             .add("action", "register")
@@ -36,7 +28,7 @@ public class client {
             
             value = Json.createObjectBuilder()
             .add("action", "login")
-            .add("Username", "Fabi")
+            .add("Username", "Fabian")
             .add("Password", "1234")
             .build();
             

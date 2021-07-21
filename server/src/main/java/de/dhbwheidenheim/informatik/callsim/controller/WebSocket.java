@@ -28,35 +28,31 @@ public class WebSocket {
     }
 
     @OnMessage
-    public void onMessage(String message, Session session) {
-        try {  
-            JsonReader reader = Json.createReader(new StringReader(message));
-            JsonObject jsonMessage = reader.readObject();
-            String action = jsonMessage.getString("action");
+    public void onMessage(String message, Session session) throws IOException{
+        JsonReader reader = Json.createReader(new StringReader(message));
+        JsonObject jsonMessage = reader.readObject();
+        String action = jsonMessage.getString("action");
 
-            switch(action){
-                case "login":
-                    ArrayList<User> users = Utils.readFromFile(DataLocation);
-                    boolean exists = users.stream().filter(p -> (p.getUsername().equals(jsonMessage.getString("Username")) 
-                        && p.getPassword().equals(jsonMessage.getString("Password")))).findFirst().isPresent();
-                        LOGGER.info("Login Bool: " + exists);
-                    if(exists){
-                        session.getBasicRemote().sendText("200 OK");
-                    }else{
-                        session.getBasicRemote().sendText("401 Unauthorized");
-                    }
-                    break;
-                case "register":
-                    User registerUser = new User(jsonMessage.getString("Username"), jsonMessage.getString("Password"));
-                    Utils.registerUser(registerUser, DataLocation);
-                    session.getBasicRemote().sendText("Register erfolgreich");
-                    break;
-                default:
-                    LOGGER.info("Kein passendes Kommando");
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
+        switch(action){
+            case "login":
+                ArrayList<User> users = Utils.readFromFile(DataLocation);
+                boolean exists = users.stream().filter(p -> (p.getUsername().equals(jsonMessage.getString("Username")) 
+                    && p.getPassword().equals(jsonMessage.getString("Password")))).findFirst().isPresent();
+                    LOGGER.info("Login Bool: " + exists);
+                if(exists){
+                    session.getBasicRemote().sendText(Utils.buildResponse("200", "OK"));
+                }else{
+                    session.getBasicRemote().sendText(Utils.buildResponse("401", "Unauthorized"));
+                }
+                break;
+            case "register":
+                User registerUser = new User(jsonMessage.getString("Username"), jsonMessage.getString("Password"));
+                Utils.registerUser(registerUser, DataLocation);
+                session.getBasicRemote().sendText(Utils.buildResponse("200", "OK"));
+                break;
+            default:
+                session.getBasicRemote().sendText(Utils.buildResponse("404", "Not Found"));
+                LOGGER.info("Kein passendes Kommando");
         }
     }
 
