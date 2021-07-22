@@ -1,5 +1,6 @@
 package de.dhbwheidenheim.informatik.callsim.controller;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -39,8 +40,12 @@ public class Utils {
 		}
 	}
  
-	public static ArrayList<User> readFromFile(String location) {
+	public static ArrayList<User> readFromFile(String location) throws IOException {
 		ArrayList<User> users = new ArrayList<User>();
+		File f = new File(location);
+		if (!f.exists()) {
+			f.createNewFile();
+		  }
 		try {
 			FileInputStream fis = new FileInputStream(location);
             ObjectInputStream ois = new ObjectInputStream(fis);
@@ -52,11 +57,14 @@ public class Utils {
 			
  
 		} catch (Exception e) {
-			log.info("error load cache from file " + e.toString());
+			if(f.length() == 0){
+				log.info("file is empty");
+			} else {
+				log.info("error load cache from file " + e.toString());
+			}
 		}
  
 		log.info("Data loaded successfully from file " + location);
-		
 
 		return users;
 	}
