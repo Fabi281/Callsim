@@ -8,8 +8,10 @@ import java.io.ObjectOutputStream;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Collection;
 
 import javax.json.Json;
+import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 
 import org.slf4j.Logger;
@@ -59,13 +61,34 @@ public class Utils {
 		return users;
 	}
 
+	public static String buildResponse(Collection<String> User){
+
+		JsonArrayBuilder tokens = Json.createArrayBuilder();
+
+		for(String u : User){
+			tokens.add(u);
+		}
+
+		JsonObject res = Json.createObjectBuilder()
+			.add("User", tokens)
+            .build();
+
+        Writer writer = new StringWriter();
+        Json.createWriter(writer).write(res);
+		return writer.toString();
+
+	}
+
 	public static String buildResponse(String Statuscode, String Statusword){
+
 		JsonObject res = Json.createObjectBuilder()
             .add("Statuscode", Statuscode)
             .add("Statusword", Statusword)
             .build();
+
         Writer writer = new StringWriter();
         Json.createWriter(writer).write(res);
 		return writer.toString();
+
 	}
 }

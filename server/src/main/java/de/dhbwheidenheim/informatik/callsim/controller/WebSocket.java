@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
@@ -41,6 +42,7 @@ public class WebSocket {
                     LOGGER.info("Login Bool: " + exists);
                 if(exists){
                     session.getBasicRemote().sendText(Utils.buildResponse("200", "OK"));
+                    SessionHandler.addSession(session, jsonMessage.getString("Username"));
                 }else{
                     session.getBasicRemote().sendText(Utils.buildResponse("401", "Unauthorized"));
                 }
@@ -50,6 +52,9 @@ public class WebSocket {
                 Utils.registerUser(registerUser, DataLocation);
                 session.getBasicRemote().sendText(Utils.buildResponse("200", "OK"));
                 break;
+            case "onlineUser":
+                session.getBasicRemote().sendText(Utils.buildResponse(SessionHandler.getOnlineUser()));
+                break;
             default:
                 session.getBasicRemote().sendText(Utils.buildResponse("404", "Not Found"));
                 LOGGER.info("Kein passendes Kommando");
@@ -58,7 +63,11 @@ public class WebSocket {
 
     @OnClose
     public void onClose(Session session) {
-        LOGGER.info("onClose " + session.getId());
+        try{
+            SessionHandler.deleteSession(session);
+        }catch(Exception e){
+            LOGGER.info("Session war nicht im Handler");
+        }
     }
 
     @OnError

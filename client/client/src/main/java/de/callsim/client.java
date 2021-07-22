@@ -13,27 +13,35 @@ public class client {
             // open websocket
             final WebsocketClientEndpoint clientEndPoint = new WebsocketClientEndpoint(new URI("ws://localhost:8787/ws"));
 
+            //JsonObject value = Json.createObjectBuilder()
+            //.add("action", "register")
+            //.add("Username", "Fabi")
+            //.add("Password", "1234")
+            //.build();
+            
+
+            // send message to websocket
+            //clientEndPoint.sendMessage(value);
+
+            //System.console().readLine();
+            
             JsonObject value = Json.createObjectBuilder()
-            .add("action", "register")
+            .add("action", "login")
             .add("Username", "Fabi")
             .add("Password", "1234")
             .build();
             
-       
+            
 
             // send message to websocket
             clientEndPoint.sendMessage(value);
 
             System.console().readLine();
-            
+
             value = Json.createObjectBuilder()
-            .add("action", "login")
-            .add("Username", "Fabian")
-            .add("Password", "1234")
+            .add("action", "onlineUser")
             .build();
             
-            
-
             // send message to websocket
             clientEndPoint.sendMessage(value);
 
