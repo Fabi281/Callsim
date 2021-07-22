@@ -11,43 +11,52 @@ public class client {
     public static void main(String[] args) {
         try {
             // open websocket
-            final WebsocketClientEndpoint clientEndPoint = new WebsocketClientEndpoint(new URI("ws://localhost:8787/ws"));
+            final WebsocketClientEndpoint clientEndPoint = new WebsocketClientEndpoint(
+                    new URI("ws://localhost:8787/ws"));
 
-            //JsonObject value = Json.createObjectBuilder()
-            //.add("action", "register")
-            //.add("Username", "Fabi")
-            //.add("Password", "1234")
-            //.build();
-            
-
-            // send message to websocket
-            //clientEndPoint.sendMessage(value);
-
-            //System.console().readLine();
-            
             JsonObject value = Json.createObjectBuilder()
-            .add("action", "login")
-            .add("Username", "Fabi")
-            .add("Password", "1234")
-            .build();
-            
-            
+                .add("action", "register")
+                .add("Username", "Fabi")
+                .add("Password", "1234")
+                .build();
 
-            // send message to websocket
+            // send REGISTER message to websocket
             clientEndPoint.sendMessage(value);
 
             System.console().readLine();
 
             value = Json.createObjectBuilder()
-            .add("action", "onlineUser")
-            .build();
-            
-            // send message to websocket
+                .add("action", "login")
+                .add("Username", "Fabi")
+                .add("Password", "1234")
+                .build();
+
+            // send LOGIN message to websocket
             clientEndPoint.sendMessage(value);
 
             System.console().readLine();
 
-        }catch (URISyntaxException ex) {
+            value = Json.createObjectBuilder()
+                .add("action", "register")
+                .add("Username", "Fabi")
+                .add("Password", "1234")
+                .build();
+
+            // send 2ND REGISTER message to websocket
+            clientEndPoint.sendMessage(value);
+
+            System.console().readLine();
+
+            value = Json.createObjectBuilder()
+                .add("action", "onlineUser")
+                .build();
+
+            // send ONLINEUSER message to websocket
+            clientEndPoint.sendMessage(value);
+
+            System.console().readLine();
+
+        } catch (URISyntaxException ex) {
             System.err.println("URISyntaxException exception: " + ex.getMessage());
         }
     }
