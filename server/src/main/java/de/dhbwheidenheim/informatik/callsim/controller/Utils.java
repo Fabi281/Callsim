@@ -62,7 +62,7 @@ public class Utils {
 	}
 
 	public static String buildResponse(Collection<String> User){
-
+		//TODO: Send all Users with Statuses here (inCall, Online, Offline)
 		JsonArrayBuilder tokens = Json.createArrayBuilder();
 
 		for(String u : User){
