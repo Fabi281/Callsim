@@ -39,7 +39,7 @@ public class WebSocket {
                 exists = users.stream().filter(p -> (p.getUsername().equals(jsonMessage.getString("Username"))
                         && p.getPassword().equals(jsonMessage.getString("Password")))).findFirst().isPresent();
                 LOGGER.info("Login Bool: " + exists);
-                
+
                 if (exists && SessionHandler.checkLogin(jsonMessage.getString("Username"))){
                     session.getBasicRemote().sendText(Utils.buildResponse("200", "OK"));
                     SessionHandler.addSession(session, jsonMessage.getString("Username"));
@@ -52,7 +52,7 @@ public class WebSocket {
                 exists = users.stream().filter(p -> (p.getUsername().equals(jsonMessage.getString("Username"))))
                         .findFirst().isPresent();
                 if (exists) {
-                    session.getBasicRemote().sendText(Utils.buildResponse("418", "I'm a teapot"));
+                    session.getBasicRemote().sendText(Utils.buildResponse("409", "Conflict"));
                 } else {
                     User registerUser = new User(jsonMessage.getString("Username"), jsonMessage.getString("Password"));
                     Utils.registerUser(registerUser, DataLocation);
