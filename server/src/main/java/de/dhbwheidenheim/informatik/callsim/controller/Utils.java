@@ -14,6 +14,7 @@ import java.util.Collection;
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,16 +70,18 @@ public class Utils {
 		return users;
 	}
 
-	public static String buildResponse(Collection<String> User){
-		//TODO: Send all Users with Statuses here (inCall, Online, Offline)
-		JsonArrayBuilder tokens = Json.createArrayBuilder();
+	public static String buildResponse(Collection<ArrayList<String>> User){
 
-		for(String u : User){
-			tokens.add(u);
+		JsonArrayBuilder users = Json.createArrayBuilder();
+
+		for(ArrayList<String> u : User){
+			JsonObjectBuilder tokens = Json.createObjectBuilder();
+			tokens.add(u.get(0), u.get(1));
+			users.add(tokens);
 		}
 
 		JsonObject res = Json.createObjectBuilder()
-			.add("User", tokens)
+			.add("User", users)
             .build();
 
         Writer writer = new StringWriter();

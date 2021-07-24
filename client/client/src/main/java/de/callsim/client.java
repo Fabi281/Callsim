@@ -48,7 +48,7 @@ public class client {
             System.console().readLine();
 
             value = Json.createObjectBuilder()
-                .add("action", "onlineUser")
+                .add("action", "UserStatuses")
                 .build();
 
             // send ONLINEUSER message to websocket

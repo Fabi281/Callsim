@@ -5,7 +5,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
@@ -40,7 +39,8 @@ public class WebSocket {
                 exists = users.stream().filter(p -> (p.getUsername().equals(jsonMessage.getString("Username"))
                         && p.getPassword().equals(jsonMessage.getString("Password")))).findFirst().isPresent();
                 LOGGER.info("Login Bool: " + exists);
-                if (exists) {
+                
+                if (exists && SessionHandler.checkLogin(jsonMessage.getString("Username"))){
                     session.getBasicRemote().sendText(Utils.buildResponse("200", "OK"));
                     SessionHandler.addSession(session, jsonMessage.getString("Username"));
                 } else {
@@ -60,8 +60,12 @@ public class WebSocket {
                 }
                 break;
 
-            case "onlineUser":
-                session.getBasicRemote().sendText(Utils.buildResponse(SessionHandler.getOnlineUser()));
+            case "UserStatuses":
+                session.getBasicRemote().sendText(Utils.buildResponse(SessionHandler.userListWithStatus()));
+                break;
+
+            case "startCall":
+                session.getBasicRemote().sendText(Utils.buildResponse(SessionHandler.userListWithStatus()));
                 break;
 
             default:

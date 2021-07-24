@@ -57,10 +57,13 @@ public class WebsocketClientEndpoint {
         }
 
         try{
-            JsonArray tmp = jsonMessage.getJsonArray("User");
-            List<String> list = new ArrayList<String>();
-            for(int i = 0; i < tmp.size(); i++){
-                list.add(tmp.getString(i));
+            JsonArray user = jsonMessage.getJsonArray("User");
+            List<List<JsonObject>> list = new ArrayList<List<JsonObject>>();
+
+            for(int i = 0; i < user.size(); i++){
+                List<JsonObject> tmp = new ArrayList<JsonObject>();
+                tmp.add(user.getJsonObject(i));
+                list.add(tmp);
             }
 
             list.forEach(s -> System.out.println(s));
