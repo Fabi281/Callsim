@@ -1,5 +1,6 @@
 package de.callsim;
 
+import java.awt.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -26,7 +27,7 @@ public class client {
 
             frame.setContentPane(new NextWindow().panel1);
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setMinimumSize(new Dimension(500, 200)); // ref: https://stackoverflow.com/a/2782041
+            frame.setMinimumSize(new Dimension(400, 450)); // ref: https://stackoverflow.com/a/2782041
             frame.pack();
             frame.setVisible(true);
         }
