@@ -1,11 +1,20 @@
 package de.dhbwheidenheim.informatik.callsim.controller;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Collection;
+
+import javax.json.Json;
+import javax.json.JsonArrayBuilder;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,10 +24,9 @@ import de.dhbwheidenheim.informatik.callsim.model.User;
 public class Utils {
     private static final Logger log = LoggerFactory.getLogger(Utils.class);
 
-    public static void writeToFile(User user, String location) {
+    public static void registerUser(User user, String location) {
 		try {
-
-			ArrayList<User> users = new ArrayList<User>();
+			ArrayList<User> users = readFromFile(location);
 			users.add(user);
 
 			FileOutputStream fos = new FileOutputStream(location);
@@ -33,8 +41,12 @@ public class Utils {
 		}
 	}
  
-	public static ArrayList<User> readFromFile(String location) {
+	public static ArrayList<User> readFromFile(String location) throws IOException {
 		ArrayList<User> users = new ArrayList<User>();
+		File f = new File(location);
+		if (!f.exists()) {
+			f.createNewFile();
+		  }
 		try {
 			FileInputStream fis = new FileInputStream(location);
             ObjectInputStream ois = new ObjectInputStream(fis);
@@ -46,15 +58,48 @@ public class Utils {
 			
  
 		} catch (Exception e) {
-			log.info("error load cache from file " + e.toString());
+			if(f.length() == 0){
+				log.info("file is empty");
+			} else {
+				log.info("error load cache from file " + e.toString());
+			}
 		}
  
 		log.info("Data loaded successfully from file " + location);
-		for(User u : users){
-			log.info("Username: " + u.getUsername());
-			log.info("Password: " + u.getPassword());
-		}
 
 		return users;
+	}
+
+	public static String buildResponse(Collection<ArrayList<String>> User){
+
+		JsonArrayBuilder users = Json.createArrayBuilder();
+
+		for(ArrayList<String> u : User){
+			JsonObjectBuilder tokens = Json.createObjectBuilder();
+			tokens.add(u.get(0), u.get(1));
+			users.add(tokens);
+		}
+
+		JsonObject res = Json.createObjectBuilder()
+			.add("User", users)
+            .build();
+
+        Writer writer = new StringWriter();
+        Json.createWriter(writer).write(res);
+		return writer.toString();
+
+	}
+
+	public static String buildResponse(String Statuscode, String Statusword){
+
+		JsonObject res = Json.createObjectBuilder()
+            .add("Statuscode", Statuscode)
+            .add("Statusword", Statusword)
+            .build();
+
+        Writer writer = new StringWriter();
+        Json.createWriter(writer).write(res);
+		return writer.toString();
+
 	}
 }

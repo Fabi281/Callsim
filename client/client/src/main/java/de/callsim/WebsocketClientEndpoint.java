@@ -1,8 +1,14 @@
 package de.callsim;
 
+import java.io.StringReader;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.json.Json;
+import javax.json.JsonArray;
 import javax.json.JsonObject;
+import javax.json.JsonReader;
 import javax.websocket.ClientEndpoint;
 import javax.websocket.CloseReason;
 import javax.websocket.ContainerProvider;
@@ -16,7 +22,6 @@ import javax.websocket.WebSocketContainer;
 public class WebsocketClientEndpoint {
 
     Session userSession = null;
-    private MessageHandler messageHandler;
 
     public WebsocketClientEndpoint(URI endpointURI) {
         try {
@@ -41,21 +46,36 @@ public class WebsocketClientEndpoint {
 
     @OnMessage
     public void onMessage(String message) {
-        if (this.messageHandler != null) {
-            this.messageHandler.handleMessage(message);
-        }
-    }
+        JsonReader reader = Json.createReader(new StringReader(message));
+        JsonObject jsonMessage = reader.readObject();
 
-    public void addMessageHandler(MessageHandler msgHandler) {
-        this.messageHandler = msgHandler;
+        try{
+            System.out.println(jsonMessage.getString("Statuscode"));
+            System.out.println(jsonMessage.getString("Statusword"));
+        }catch(Exception e){
+            
+        }
+
+        try{
+            JsonArray user = jsonMessage.getJsonArray("User");
+            List<List<JsonObject>> list = new ArrayList<List<JsonObject>>();
+
+            for(int i = 0; i < user.size(); i++){
+                List<JsonObject> tmp = new ArrayList<JsonObject>();
+                tmp.add(user.getJsonObject(i));
+                list.add(tmp);
+            }
+
+            list.forEach(s -> System.out.println(s));
+        }catch(Exception e){
+
+        }
+        
+
     }
 
     public void sendMessage(JsonObject json) {
         this.userSession.getAsyncRemote().sendObject(json);
     }
 
-    public static interface MessageHandler {
-
-        public void handleMessage(String message);
-    }
 }

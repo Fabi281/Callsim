@@ -1,7 +1,5 @@
 package de.callsim;
 
-
-import java.awt.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -41,38 +39,47 @@ public class client {
 
         try {
             // open websocket
-            final WebsocketClientEndpoint clientEndPoint = new WebsocketClientEndpoint(new URI("ws://localhost:8787/ws"));
-
-
-            // add listener
-            clientEndPoint.addMessageHandler(new WebsocketClientEndpoint.MessageHandler() {
-                public void handleMessage(String message) {
-                    System.out.println(message);
-                }
-            });
+            final WebsocketClientEndpoint clientEndPoint = new WebsocketClientEndpoint(
+                    new URI("ws://localhost:8787/ws"));
 
             JsonObject value = Json.createObjectBuilder()
-            .add("action", "register")
-            .add("Username", "Fabi")
-            .add("Password", "1234")
-            .build();
-            
-       
+                .add("action", "register")
+                .add("Username", "Fabi")
+                .add("Password", "1234")
+                .build();
 
-            // send message to websocket
+            // send REGISTER message to websocket
             clientEndPoint.sendMessage(value);
 
             System.console().readLine();
-            
-            value = Json.createObjectBuilder()
-            .add("action", "login")
-            .add("Username", "Fabi")
-            .add("Password", "1234")
-            .build();
-            
-            
 
-            // send message to websocket
+            value = Json.createObjectBuilder()
+                .add("action", "login")
+                .add("Username", "Fabi")
+                .add("Password", "1234")
+                .build();
+
+            // send LOGIN message to websocket
+            clientEndPoint.sendMessage(value);
+
+            System.console().readLine();
+
+            value = Json.createObjectBuilder()
+                .add("action", "register")
+                .add("Username", "Fabi")
+                .add("Password", "1234")
+                .build();
+
+            // send 2ND REGISTER message to websocket
+            clientEndPoint.sendMessage(value);
+
+            System.console().readLine();
+
+            value = Json.createObjectBuilder()
+                .add("action", "UserStatuses")
+                .build();
+
+            // send ONLINEUSER message to websocket
             clientEndPoint.sendMessage(value);
 
             System.console().readLine();

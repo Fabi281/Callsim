@@ -21,48 +21,66 @@ public class WebSocket {
     private static final Logger LOGGER = LoggerFactory.getLogger(WebSocket.class);
     private static final String DataLocation = "./data/Account";
 
-
     @OnOpen
     public void onOpen(Session session) {
         LOGGER.info("onOpen " + session.getId());
     }
 
     @OnMessage
-    public void onMessage(String message, Session session) {
-        try {  
-            JsonReader reader = Json.createReader(new StringReader(message));
-            JsonObject jsonMessage = reader.readObject();
-            String action = jsonMessage.getString("action");
+    public void onMessage(String message, Session session) throws IOException {
+        JsonReader reader = Json.createReader(new StringReader(message));
+        JsonObject jsonMessage = reader.readObject();
+        String action = jsonMessage.getString("action");
+        ArrayList<User> users = Utils.readFromFile(DataLocation);
+        boolean exists;
 
-            switch(action){
-                case "login":
-                    ArrayList<User> users = Utils.readFromFile(DataLocation);
-                    boolean exists = users.stream().filter(p -> (p.getUsername().equals(jsonMessage.getString("Username")) 
+        switch (action) {
+            case "login":
+                exists = users.stream().filter(p -> (p.getUsername().equals(jsonMessage.getString("Username"))
                         && p.getPassword().equals(jsonMessage.getString("Password")))).findFirst().isPresent();
-                        LOGGER.info("Login Bool: " + exists);
-                    if(exists){
-                        session.getBasicRemote().sendText("200 OK");
-                    }else{
-                        session.getBasicRemote().sendText("401 Unauthorized");
-                    }
-                    break;
-                case "register":
-                    User registerUser = new User(jsonMessage.getString("Username"), jsonMessage.getString("Password"));
-                    Utils.writeToFile(registerUser, DataLocation);
-                    session.getBasicRemote().sendText("Register erfolgreich");
-                    break;
-                default:
-                    LOGGER.info("Kein passendes Kommando");
-            }
+                LOGGER.info("Login Bool: " + exists);
 
-        } catch (IOException e) {
-            e.printStackTrace();
+                if (exists && SessionHandler.checkLogin(jsonMessage.getString("Username"))){
+                    session.getBasicRemote().sendText(Utils.buildResponse("200", "OK"));
+                    SessionHandler.addSession(session, jsonMessage.getString("Username"));
+                } else {
+                    session.getBasicRemote().sendText(Utils.buildResponse("401", "Unauthorized"));
+                }
+                break;
+
+            case "register":
+                exists = users.stream().filter(p -> (p.getUsername().equals(jsonMessage.getString("Username"))))
+                        .findFirst().isPresent();
+                if (exists) {
+                    session.getBasicRemote().sendText(Utils.buildResponse("409", "Conflict"));
+                } else {
+                    User registerUser = new User(jsonMessage.getString("Username"), jsonMessage.getString("Password"));
+                    Utils.registerUser(registerUser, DataLocation);
+                    session.getBasicRemote().sendText(Utils.buildResponse("200", "OK"));
+                }
+                break;
+
+            case "UserStatuses":
+                session.getBasicRemote().sendText(Utils.buildResponse(SessionHandler.userListWithStatus()));
+                break;
+
+            case "startCall":
+                session.getBasicRemote().sendText(Utils.buildResponse(SessionHandler.userListWithStatus()));
+                break;
+
+            default:
+                session.getBasicRemote().sendText(Utils.buildResponse("404", "Not Found"));
+                LOGGER.info("Kein passendes Kommando");
         }
     }
 
     @OnClose
     public void onClose(Session session) {
-        LOGGER.info("onClose " + session.getId());
+        try {
+            SessionHandler.deleteSession(session);
+        } catch (Exception e) {
+            LOGGER.info("Session war nicht im Handler");
+        }
     }
 
     @OnError
