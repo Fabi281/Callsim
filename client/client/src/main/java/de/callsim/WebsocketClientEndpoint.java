@@ -2,6 +2,7 @@ package de.callsim;
 
 import java.io.StringReader;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,33 +46,74 @@ public class WebsocketClientEndpoint {
     }
 
     @OnMessage
-    public void onMessage(String message) {
+    public void onMessage(String message) throws URISyntaxException {
+
+
         JsonReader reader = Json.createReader(new StringReader(message));
         JsonObject jsonMessage = reader.readObject();
+        String action = jsonMessage.getString("Action");
 
-        try{
-            System.out.println(jsonMessage.getString("Statuscode"));
-            System.out.println(jsonMessage.getString("Statusword"));
-        }catch(Exception e){
-            
-        }
+        switch (action) {
+            case "LoginResponse":
+                System.out.println(jsonMessage.getString("Value"));
+                break;
 
-        try{
-            JsonArray user = jsonMessage.getJsonArray("User");
-            List<List<JsonObject>> list = new ArrayList<List<JsonObject>>();
+            case "RegisterResponse":
+                System.out.println(jsonMessage.getString("Value"));
+                break;
 
-            for(int i = 0; i < user.size(); i++){
-                List<JsonObject> tmp = new ArrayList<JsonObject>();
-                tmp.add(user.getJsonObject(i));
-                list.add(tmp);
-            }
+            case "StatusResponse":
+                JsonArray user = jsonMessage.getJsonArray("User");
+                List<List<JsonObject>> list = new ArrayList<List<JsonObject>>();
 
-            list.forEach(s -> System.out.println(s));
-        }catch(Exception e){
+                for(int i = 0; i < user.size(); i++){
+                    List<JsonObject> tmp = new ArrayList<JsonObject>();
+                    tmp.add(user.getJsonObject(i));
+                    list.add(tmp);
+                }
 
-        }
-        
+                list.forEach(s -> System.out.println(s));
+                break;
 
+            case "NotFound":
+                System.out.println(jsonMessage.getString("Value"));
+                break;
+
+            case "incomingCall":
+                System.out.println(jsonMessage.getString("Value"));
+                break;
+
+            case "startedCall":
+                System.out.println(jsonMessage.getString("Value"));
+                break; 
+
+            case "RemoteCallEnded":
+                System.out.println(jsonMessage.getString("Value"));
+                break;
+
+            case "SelfCallEnded":
+                System.out.println(jsonMessage.getString("Value"));
+                break;
+
+            case "SelfCallAccepted":
+                System.out.println(jsonMessage.getString("Value"));
+                break;
+
+            case "RemoteCallAccepted":
+                System.out.println(jsonMessage.getString("Value"));
+                break;
+
+            case "SelfCallDeclined":
+                System.out.println(jsonMessage.getString("Value"));
+                break;
+
+            case "RemoteCallDeclined":
+                System.out.println(jsonMessage.getString("Value"));
+                break;
+
+            default:
+            System.out.println("Keine gültige Rückmeldung");
+        } 
     }
 
     public void sendMessage(JsonObject json) {

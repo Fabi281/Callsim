@@ -64,8 +64,6 @@ public class Utils {
 				log.info("error load cache from file " + e.toString());
 			}
 		}
- 
-		log.info("Data loaded successfully from file " + location);
 
 		return users;
 	}
@@ -81,6 +79,7 @@ public class Utils {
 		}
 
 		JsonObject res = Json.createObjectBuilder()
+			.add("Action", "StatusResponse")
 			.add("User", users)
             .build();
 
@@ -90,11 +89,11 @@ public class Utils {
 
 	}
 
-	public static String buildResponse(String Statuscode, String Statusword){
+	public static String buildResponse(String Action, String Value){
 
 		JsonObject res = Json.createObjectBuilder()
-            .add("Statuscode", Statuscode)
-            .add("Statusword", Statusword)
+            .add("Action", Action)
+            .add("Value", Value)
             .build();
 
         Writer writer = new StringWriter();

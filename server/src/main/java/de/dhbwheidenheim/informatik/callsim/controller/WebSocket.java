@@ -6,7 +6,11 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 
-import javax.websocket.*;
+import javax.websocket.OnClose;
+import javax.websocket.OnError;
+import javax.websocket.OnMessage;
+import javax.websocket.OnOpen;
+import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 import javax.json.Json;
 import javax.json.JsonObject;
@@ -41,10 +45,10 @@ public class WebSocket {
                 LOGGER.info("Login Bool: " + exists);
 
                 if (exists && SessionHandler.checkLogin(jsonMessage.getString("Username"))){
-                    session.getBasicRemote().sendText(Utils.buildResponse("200", "OK"));
+                    session.getBasicRemote().sendText(Utils.buildResponse("LoginResponse", "Succesfully logged in!"));
                     SessionHandler.addSession(session, jsonMessage.getString("Username"));
                 } else {
-                    session.getBasicRemote().sendText(Utils.buildResponse("401", "Unauthorized"));
+                    session.getBasicRemote().sendText(Utils.buildResponse("LoginResponse", "Someone is already logged in to this Account!"));
                 }
                 break;
 
@@ -52,11 +56,11 @@ public class WebSocket {
                 exists = users.stream().filter(p -> (p.getUsername().equals(jsonMessage.getString("Username"))))
                         .findFirst().isPresent();
                 if (exists) {
-                    session.getBasicRemote().sendText(Utils.buildResponse("409", "Conflict"));
+                    session.getBasicRemote().sendText(Utils.buildResponse("RegisterResponse", "Username already in use!"));
                 } else {
                     User registerUser = new User(jsonMessage.getString("Username"), jsonMessage.getString("Password"));
                     Utils.registerUser(registerUser, DataLocation);
-                    session.getBasicRemote().sendText(Utils.buildResponse("200", "OK"));
+                    session.getBasicRemote().sendText(Utils.buildResponse("RegisterResponse", "Successfully registered!"));
                 }
                 break;
 
@@ -65,11 +69,19 @@ public class WebSocket {
                 break;
 
             case "startCall":
-                session.getBasicRemote().sendText(Utils.buildResponse(SessionHandler.userListWithStatus()));
+                SessionHandler.startCall(session, jsonMessage.getString("Username"));
+                break;
+                
+            case "endCall":
+                SessionHandler.endCall(session, jsonMessage.getString("Username"), jsonMessage.getString("BBBServer"));
+                break;
+
+            case "respondCall":
+                SessionHandler.respondToCall(session, jsonMessage.getString("Response"), jsonMessage.getString("Username"));
                 break;
 
             default:
-                session.getBasicRemote().sendText(Utils.buildResponse("404", "Not Found"));
+                session.getBasicRemote().sendText(Utils.buildResponse("NotFound", "Not Found"));
                 LOGGER.info("Kein passendes Kommando");
         }
     }
@@ -79,7 +91,7 @@ public class WebSocket {
         try {
             SessionHandler.deleteSession(session);
         } catch (Exception e) {
-            LOGGER.info("Session war nicht im Handler");
+            LOGGER.info("Session war nicht im Handler"+ e.toString());
         }
     }
 
