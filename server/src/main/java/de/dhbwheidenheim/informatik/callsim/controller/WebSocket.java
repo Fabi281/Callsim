@@ -65,7 +65,7 @@ public class WebSocket {
                 break;
 
             case "UserStatuses":
-                session.getBasicRemote().sendText(Utils.buildResponse(SessionHandler.userListWithStatus()));
+                session.getBasicRemote().sendText(Utils.buildResponse(SessionHandler.userListWithStatus(DataLocation)));
                 break;
 
             case "startCall":

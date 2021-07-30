@@ -8,6 +8,8 @@ import java.util.Map;
 
 import javax.websocket.Session;
 
+import de.dhbwheidenheim.informatik.callsim.model.User;
+
 public class SessionHandler {
 
     private final static Map<Session, ArrayList<String>> sessions = new HashMap<Session, ArrayList<String>>();
@@ -35,8 +37,20 @@ public class SessionHandler {
         sessions.remove(session);
     }
 
-    public static Collection<ArrayList<String>> userListWithStatus(){
+    public static Collection<ArrayList<String>> userListWithStatus() throws IOException{
         return sessions.values();
+    }
+
+    public static Map<String, String> userListWithStatus(String location) throws IOException{
+        Map<String, String> allUserStatuses = new HashMap<String, String>();
+        for(ArrayList<String> user : sessions.values()){
+            allUserStatuses.put(user.get(0), user.get(1));
+        }
+
+        for(User user : Utils.readFromFile(location)){
+            allUserStatuses.putIfAbsent(user.getUsername(), "Offline");
+        }
+        return allUserStatuses;
     }
 
     public static boolean checkLogin(String Username){
