@@ -19,20 +19,3 @@ To finally start and test the Application please follow the following Guide (VS-
 
 3. Start the Server by running the "CallSimApplication.java"
 
-4. Start the Client by running "client.java"
-
-Notes for Team:
-
-1. The Naming of Classes and Variables in the Server Component is temporary and might be misleading as of now
-
-2. I (Fabian) will be fixing it. Until it is fixed please refrain yourself from working on the Server Component
-
-3. You can customize the client component to your heart's content (build a GUI). There are examples on how to communicate with the server and start a websocket in the
-   client. The only actions as of now are "login" and "register" with persistence (saved to File). I´ll explain everything in more detail at the next meeting.
-   If you are not confident in working with websockets you can just copy the client and work on it seperatly or make a backup (generally not needed due to us
-   working with Github).
-
-4. If there are any questions contact me on Discord or Whats App
-
-5. There probably are a LOT of Bugs especially in the Server Component. I´ll be working on those until the next Meeting (no new Actions or Features just Bugfixing
-   until then)
