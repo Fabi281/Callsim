@@ -1,5 +1,7 @@
 package de.callsim;
 
+import javax.json.Json;
+import javax.json.JsonObject;
 import javax.swing.*;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.text.StyleContext;
@@ -9,9 +11,9 @@ import java.awt.event.ActionListener;
 import java.util.Locale;
 
 public class Login {
-    JTextField textField1;
+    JTextField usernameField;
     JPanel panel1;
-    JPasswordField passwordField1;
+    JPasswordField passwordField;
     JButton login;
     JLabel usernameLabel;
     JLabel passLabel;
@@ -20,9 +22,15 @@ public class Login {
         login.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // code here will be executed when submitting login form
-
-                JOptionPane.showMessageDialog(null, "login");
+                String username = usernameField.getText();
+                String password = passwordField.getText();
+                JsonObject value = Json.createObjectBuilder()
+                        .add("action", "login")
+                        .add("Username", username)
+                        .add("Password", password)
+                        .build();
+                // send LOGIN message to websocket
+                client.clientEndPoint.sendMessage(value);
             }
         });
     }
@@ -64,10 +72,10 @@ public class Login {
         panel3.setBackground(new Color(-1));
         panel3.setForeground(new Color(-12763843));
         panel1.add(panel3, new com.intellij.uiDesigner.core.GridConstraints(3, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_NORTH, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
-        textField1 = new JTextField();
-        Font textField1Font = this.$$$getFont$$$("Arial", -1, 20, textField1.getFont());
-        if (textField1Font != null) textField1.setFont(textField1Font);
-        panel3.add(textField1, new com.intellij.uiDesigner.core.GridConstraints(0, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+        usernameField = new JTextField();
+        Font usernameFieldFont = this.$$$getFont$$$("Arial", -1, 20, usernameField.getFont());
+        if (usernameFieldFont != null) usernameField.setFont(usernameFieldFont);
+        panel3.add(usernameField, new com.intellij.uiDesigner.core.GridConstraints(0, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         usernameLabel = new JLabel();
         Font usernameLabelFont = this.$$$getFont$$$("Arial Nova Light", -1, 20, usernameLabel.getFont());
         if (usernameLabelFont != null) usernameLabel.setFont(usernameLabelFont);
@@ -78,10 +86,10 @@ public class Login {
         panel4.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(1, 2, new Insets(0, 0, 0, 0), -1, -1));
         panel4.setBackground(new Color(-1));
         panel1.add(panel4, new com.intellij.uiDesigner.core.GridConstraints(4, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_VERTICAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
-        passwordField1 = new JPasswordField();
-        Font passwordField1Font = this.$$$getFont$$$(null, -1, 18, passwordField1.getFont());
-        if (passwordField1Font != null) passwordField1.setFont(passwordField1Font);
-        panel4.add(passwordField1, new com.intellij.uiDesigner.core.GridConstraints(0, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+        passwordField = new JPasswordField();
+        Font passwordFieldFont = this.$$$getFont$$$(null, -1, 18, passwordField.getFont());
+        if (passwordFieldFont != null) passwordField.setFont(passwordFieldFont);
+        panel4.add(passwordField, new com.intellij.uiDesigner.core.GridConstraints(0, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         passLabel = new JLabel();
         passLabel.setBackground(new Color(-1));
         Font passLabelFont = this.$$$getFont$$$("Arial Nova Light", -1, 20, passLabel.getFont());
@@ -124,5 +132,10 @@ public class Login {
         Font fontWithFallback = isMac ? new Font(font.getFamily(), font.getStyle(), font.getSize()) : new StyleContext().getFont(font.getFamily(), font.getStyle(), font.getSize());
         return fontWithFallback instanceof FontUIResource ? fontWithFallback : new FontUIResource(fontWithFallback);
     }
+
+    /**
+     * @noinspection ALL
+     */
+
 
 }

@@ -1,5 +1,6 @@
 package de.callsim;
 
+import java.awt.*;
 import java.io.StringReader;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -10,6 +11,7 @@ import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
+import javax.swing.*;
 import javax.websocket.ClientEndpoint;
 import javax.websocket.CloseReason;
 import javax.websocket.ContainerProvider;
@@ -48,13 +50,17 @@ public class WebsocketClientEndpoint {
     @OnMessage
     public void onMessage(String message) throws URISyntaxException {
 
-
         JsonReader reader = Json.createReader(new StringReader(message));
         JsonObject jsonMessage = reader.readObject();
         String action = jsonMessage.getString("Action");
 
         switch (action) {
-            case "LoginResponse":
+            case "PosLoginResponse":
+                System.out.println(jsonMessage.getString("Value"));
+                client.showAppPage();
+                break;
+
+            case "NegLoginResponse":
                 System.out.println(jsonMessage.getString("Value"));
                 break;
 
@@ -85,7 +91,7 @@ public class WebsocketClientEndpoint {
 
             case "startedCall":
                 System.out.println(jsonMessage.getString("Value"));
-                break; 
+                break;
 
             case "RemoteCallEnded":
                 System.out.println(jsonMessage.getString("Value"));
@@ -112,8 +118,8 @@ public class WebsocketClientEndpoint {
                 break;
 
             default:
-            System.out.println("Keine gültige Rückmeldung");
-        } 
+                System.out.println("Keine gültige Rückmeldung");
+        }
     }
 
     public void sendMessage(JsonObject json) {
