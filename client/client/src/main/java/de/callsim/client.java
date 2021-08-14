@@ -12,7 +12,7 @@ public class client {
 
     public static void main(String[] args) {
 
-        final boolean showLogin = false;
+        final boolean showLogin = true;
 
         if(showLogin){
             JFrame frame = new JFrame("CallSim Login");
@@ -31,9 +31,6 @@ public class client {
             frame.pack();
             frame.setVisible(true);
         }
-
-
-
     }
 
     public void startConnection(){
