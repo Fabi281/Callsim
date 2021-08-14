@@ -10,6 +10,7 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
@@ -64,8 +65,6 @@ public class Utils {
 				log.info("error load cache from file " + e.toString());
 			}
 		}
- 
-		log.info("Data loaded successfully from file " + location);
 
 		return users;
 	}
@@ -81,6 +80,7 @@ public class Utils {
 		}
 
 		JsonObject res = Json.createObjectBuilder()
+			.add("Action", "StatusResponse")
 			.add("User", users)
             .build();
 
@@ -90,11 +90,32 @@ public class Utils {
 
 	}
 
-	public static String buildResponse(String Statuscode, String Statusword){
+	public static String buildResponse(Map<String, String> User){
+
+		JsonArrayBuilder users = Json.createArrayBuilder();
+
+		JsonObjectBuilder tokens = Json.createObjectBuilder();
+		User.forEach((k, v) -> {
+			tokens.add(k, v);
+		});
+		users.add(tokens);
 
 		JsonObject res = Json.createObjectBuilder()
-            .add("Statuscode", Statuscode)
-            .add("Statusword", Statusword)
+			.add("Action", "StatusResponse")
+			.add("User", users)
+            .build();
+
+        Writer writer = new StringWriter();
+        Json.createWriter(writer).write(res);
+		return writer.toString();
+
+	}
+
+	public static String buildResponse(String Action, String Value){
+
+		JsonObject res = Json.createObjectBuilder()
+            .add("Action", Action)
+            .add("Value", Value)
             .build();
 
         Writer writer = new StringWriter();
