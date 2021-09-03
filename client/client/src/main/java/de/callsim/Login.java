@@ -32,13 +32,7 @@ public class Login {
         registerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int idx = tabpane.getSelectedIndex();
-                JOptionPane.showMessageDialog(null, idx);
-                if (idx == 0) {
-                    tabpane.setSelectedIndex(1); // according to https://stackoverflow.com/a/4157492, this should actually work
-                } else {
-                    tabpane.setSelectedIndex(0);
-                }
+                triggerRegister();
             }
         });
 
@@ -76,6 +70,20 @@ public class Login {
                 .build();
         // send LOGIN message to websocket
         client.clientEndPoint.sendMessage(value);
+    }
+
+    public void triggerRegister(){
+        String username = usernameField.getText();
+        String password = passwordField.getText();
+        if ((username != null || username != "") && (password != null || password != "")){
+            JsonObject value = Json.createObjectBuilder()
+                    .add("action", "register")
+                    .add("Username", username)
+                    .add("Password", password)
+                    .build();
+            // send LOGIN message to websocket
+            client.clientEndPoint.sendMessage(value);
+        }
     }
 
     public void popupMessage(String msg) {
