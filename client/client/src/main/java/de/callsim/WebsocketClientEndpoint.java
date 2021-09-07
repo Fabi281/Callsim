@@ -64,7 +64,11 @@ public class WebsocketClientEndpoint {
                 System.out.println(jsonMessage.getString("Value"));
                 break;
 
-            case "RegisterResponse":
+            case "PosRegisterResponse":
+                System.out.println(jsonMessage.getString("Value"));
+                break;
+
+            case "NegRegisterResponse":
                 System.out.println(jsonMessage.getString("Value"));
                 break;
 
