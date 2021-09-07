@@ -33,7 +33,7 @@ public class client {
 
     public static void showLoginPage(){
         frame = new JFrame("CallSim Login");
-        frame.setContentPane(new Login().panel1);
+        frame.setContentPane(new Login().root_panel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setMinimumSize(new Dimension(500,400));
         frame.pack();
