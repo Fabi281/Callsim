@@ -35,7 +35,9 @@ public class client {
         frame = new JFrame("CallSim Login");
         frame.setContentPane(new Login().root_panel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setMinimumSize(new Dimension(500,400));
+        Dimension size = new Dimension(600,500);
+        frame.setMinimumSize(size);
+        frame.setMaximumSize(size); /* so you cannot change size of panel, but should fit everything */
         frame.pack();
         frame.setVisible(true);
     }
