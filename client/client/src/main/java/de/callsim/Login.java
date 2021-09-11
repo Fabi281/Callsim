@@ -105,9 +105,9 @@ public class Login {
 
     public void triggerLogin() {
         String username = usernameField.getText();
-        String password = passwordField.getText();
+        String password = passwordField.getPassword().toString();
         JsonObject value = Json.createObjectBuilder()
-                .add("action", "loginBtn")
+                .add("action", "login")
                 .add("Username", username)
                 .add("Password", password)
                 .build();

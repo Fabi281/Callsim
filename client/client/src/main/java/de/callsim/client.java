@@ -3,10 +3,7 @@ package de.callsim;
 import java.awt.*;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.io.*;
 
-import javax.json.Json;
-import javax.json.JsonObject;
 import javax.swing.*;
 
 public class client {
@@ -43,8 +40,9 @@ public class client {
     }
 
     public static void showAppPage(){
+        if(frame == null) frame = new JFrame("CallSim"); /* just to make sure */
         frame.setTitle("CallSim App");
-        frame.setContentPane(new NextWindow().panel1);
+        frame.setContentPane(new NextWindow().rootPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setMinimumSize(new Dimension(400, 450)); // ref: https://stackoverflow.com/a/2782041
         frame.pack();
