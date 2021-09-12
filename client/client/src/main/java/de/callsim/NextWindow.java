@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.HashMap;
 
@@ -36,18 +37,45 @@ public class NextWindow {
     JButton userBtn1;
     JButton userBtn2;
     JLabel numberOfUsers;
+    JPanel callContainer;
+    JPanel callProgressPanel;
+    JProgressBar progressBar1;
+    JPanel namePanelContainer;
+    JProgressBar userStateBar;
+    JLabel userStatebar2;
+    JButton hangUpBtn;
+    JPanel contentPanel;
+    JPanel statePanel;
+    JLabel stateDisplay;
     int currentUserId = -1;
     String userNamePrefix = "@";
 
+    ArrayList<String> log;
+    final int maxLogs = 10;
+
+    boolean callInProgress = false;
+
     HashMap<String, String> userData = new HashMap<>();
+
+    HashMap<String, String> stateColors = new HashMap<String, String>() {{
+        put("online", "0,166,0;This user is online and available");
+        put("busy", "249,179,96;This user is online but currently in another call");
+        put("offline", "111,3,30;This user is not online");
+
+    }};
+
+    /* ref: https://www.baeldung.com/java-initialize-hashmap#the-static-initializer-for-a-static-hashmap*/
 
 
     // no idea (yet) how dynamic rendering can be realized
 
     public NextWindow() {
-        userData.put("der-bernd", "Mayinger,Bernd");
-        userData.put("theoneandonly", "Assfalg,Rolf");
+        userData.put("der-bernd", "Mayinger,Bernd,online");
+        userData.put("theoneandonly", "Assfalg,Rolf,busy");
         numberOfUsers.setText(userData.size() + " user" + (userData.size() != 1 ? "s" : "") + " registered");
+        updateCallDisplay();
+
+        log = new ArrayList<String>();
 
         call.addActionListener(new ActionListener() {
             @Override
@@ -89,22 +117,81 @@ public class NextWindow {
                 updateBigDisplay(targetUser);
             }
         });
+        hangUpBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cancelCall();
+            }
+        });
     }
 
     public void updateBigDisplay(String newUsername) {
+        if (callInProgress) return; /* if a call is in progress, abort */
         String dataOfUser = userData.get(newUsername);
         if (dataOfUser == null) return;
 
         String firstNameOfUser = dataOfUser.split(",")[1];
         String surnameOfUser = dataOfUser.split(",")[0];
+        String stateOfUser = stateColors.get(dataOfUser.split(",")[2]);
+
+        String color = stateOfUser.split(";")[0];
+        int colorR = Integer.parseInt(color.split(",")[0]),
+                colorG = Integer.parseInt(color.split(",")[1]),
+                colorB = Integer.parseInt(color.split(",")[2]);
+
+
+        String stateTooltip = stateOfUser.split(";")[1];
+
 
         firstNameLabelBig.setText(firstNameOfUser);
         surnameLabelBig.setText(surnameOfUser);
         usernameLabelBig.setText(usernamePrefix.getText() + newUsername);
+        userStatebar2.setForeground(new Color(colorR, colorG, colorB));
+        userStatebar2.setToolTipText(stateTooltip);
     }
 
     public void startACall(String targetUser) {
+        log("Starting new call...");
+        setCallDisplay(true);
 
+        /* request logic here */
+        boolean browserOpen = true; /* simulating establishment of connection */
+        if (browserOpen) log("Connection established");
+    }
+
+    public void cancelCall() {
+        log("Cancelling call...");
+        /* request logic here */
+
+        setCallDisplay(false);
+        log("Call has been successfully cancelled");
+    }
+
+    private void log(String msg) {
+        log.add(0, msg); /* always add to beginning */
+        if(log.size() > maxLogs){
+            /* here you could reduce the list so it doensn't mess up the storage */
+        }
+
+        stateDisplay.setText(msg);
+    }
+
+
+    public void triggerCallDisplay() {
+        callInProgress = !callInProgress;
+        updateCallDisplay();
+    }
+
+    public void setCallDisplay(boolean vis) {
+        callInProgress = vis;
+        updateCallDisplay();
+    }
+
+    private void updateCallDisplay() {
+        callContainer.setVisible(!callInProgress);
+        callProgressPanel.setVisible(callInProgress);
+
+        listPanel.setEnabled(!callInProgress); /* when call in progress, disable the sidebar */
     }
 
     {
@@ -126,7 +213,7 @@ public class NextWindow {
         rootPanel.setLayout(new BorderLayout(0, 0));
         rootPanel.setBackground(new Color(-1));
         rootPanel.setMaximumSize(new Dimension(600, 1000));
-        rootPanel.setMinimumSize(new Dimension(500, 300));
+        rootPanel.setMinimumSize(new Dimension(550, 500));
         rootPanel.setOpaque(true);
         rootPanel.setPreferredSize(new Dimension(650, 600));
         final JScrollPane scrollPane1 = new JScrollPane();
@@ -236,47 +323,36 @@ public class NextWindow {
         numberOfUsers.setText("12 users registered");
         listPanel.add(numberOfUsers, new com.intellij.uiDesigner.core.GridConstraints(4, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         userPanel = new JPanel();
-        userPanel.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(1, 1, new Insets(50, 10, 40, 50), -1, -1));
+        userPanel.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(2, 1, new Insets(0, 0, 0, 0), -1, -1));
         userPanel.setBackground(new Color(-1));
         userPanel.setForeground(new Color(-16775320));
+        userPanel.setVisible(true);
         rootPanel.add(userPanel, BorderLayout.CENTER);
+        contentPanel = new JPanel();
+        contentPanel.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(1, 1, new Insets(50, 45, 0, 20), -1, -1));
+        contentPanel.setBackground(new Color(-1));
+        contentPanel.setForeground(new Color(-14408668));
+        contentPanel.setVisible(true);
+        userPanel.add(contentPanel, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         blueBg = new JPanel();
-        blueBg.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(2, 1, new Insets(15, 5, 0, 0), -1, -1));
+        blueBg.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(2, 1, new Insets(10, 5, 5, 0), -1, -1));
         blueBg.setBackground(new Color(-1314561));
-        userPanel.add(blueBg, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 1, false));
+        contentPanel.add(blueBg, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 1, false));
         whiteBg = new JPanel();
         whiteBg.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
         whiteBg.setBackground(new Color(-1));
         blueBg.add(whiteBg, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         dataContainer = new JPanel();
-        dataContainer.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(5, 1, new Insets(20, 50, 30, 0), -1, -1));
+        dataContainer.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(4, 3, new Insets(20, 50, 30, 0), -1, -1));
         dataContainer.setBackground(new Color(-1));
         whiteBg.add(dataContainer, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
-        firstNamePanel = new JPanel();
-        firstNamePanel.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(2, 1, new Insets(0, 0, 0, 0), -1, -1));
-        firstNamePanel.setBackground(new Color(-1));
-        dataContainer.add(firstNamePanel, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
-        firstNameLabelBig = new JLabel();
-        Font firstNameLabelBigFont = this.$$$getFont$$$("Arial Nova Light", -1, 36, firstNameLabelBig.getFont());
-        if (firstNameLabelBigFont != null) firstNameLabelBig.setFont(firstNameLabelBigFont);
-        firstNameLabelBig.setForeground(new Color(-13224394));
-        firstNameLabelBig.setText("Rolf");
-        firstNamePanel.add(firstNameLabelBig, new com.intellij.uiDesigner.core.GridConstraints(1, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
-        final com.intellij.uiDesigner.core.Spacer spacer2 = new com.intellij.uiDesigner.core.Spacer();
-        firstNamePanel.add(spacer2, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_VERTICAL, 1, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
-        surnamePanel = new JPanel();
-        surnamePanel.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
-        surnamePanel.setBackground(new Color(-1));
-        dataContainer.add(surnamePanel, new com.intellij.uiDesigner.core.GridConstraints(1, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
-        surnameLabelBig = new JLabel();
-        Font surnameLabelBigFont = this.$$$getFont$$$("Arial Nova Light", Font.BOLD, 36, surnameLabelBig.getFont());
-        if (surnameLabelBigFont != null) surnameLabelBig.setFont(surnameLabelBigFont);
-        surnameLabelBig.setText("Assfalg");
-        surnamePanel.add(surnameLabelBig, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         actionPanel = new JPanel();
-        actionPanel.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(1, 1, new Insets(0, 30, 0, 30), -1, -1));
+        actionPanel.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(2, 1, new Insets(0, 0, 0, 0), -1, -1));
         actionPanel.setBackground(new Color(-1));
-        dataContainer.add(actionPanel, new com.intellij.uiDesigner.core.GridConstraints(4, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_SOUTHWEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        dataContainer.add(actionPanel, new com.intellij.uiDesigner.core.GridConstraints(3, 2, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_SOUTH, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        callContainer = new JPanel();
+        callContainer.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
+        actionPanel.add(callContainer, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         call = new JButton();
         call.setBackground(new Color(-1));
         Font callFont = this.$$$getFont$$$("Arial Nova Light", -1, 26, call.getFont());
@@ -285,12 +361,39 @@ public class NextWindow {
         call.setHorizontalTextPosition(0);
         call.setLabel("\uD83D\uDCDE");
         call.setText("\uD83D\uDCDE");
-        actionPanel.add(call, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        callContainer.add(call, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        callProgressPanel = new JPanel();
+        callProgressPanel.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(1, 2, new Insets(0, 0, 0, 0), -1, -1));
+        callProgressPanel.setBackground(new Color(-1));
+        actionPanel.add(callProgressPanel, new com.intellij.uiDesigner.core.GridConstraints(1, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        final JPanel panel3 = new JPanel();
+        panel3.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(2, 1, new Insets(0, 0, 0, 0), -1, -1));
+        panel3.setBackground(new Color(-1));
+        callProgressPanel.add(panel3, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        progressBar1 = new JProgressBar();
+        progressBar1.setForeground(new Color(-16775320));
+        progressBar1.setIndeterminate(true);
+        panel3.add(progressBar1, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final JLabel label5 = new JLabel();
+        Font label5Font = this.$$$getFont$$$("Arial Nova Light", -1, 16, label5.getFont());
+        if (label5Font != null) label5.setFont(label5Font);
+        label5.setHorizontalAlignment(0);
+        label5.setHorizontalTextPosition(2);
+        label5.setText("CallSim tries to start the call");
+        panel3.add(label5, new com.intellij.uiDesigner.core.GridConstraints(1, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        hangUpBtn = new JButton();
+        hangUpBtn.setBackground(new Color(-1));
+        Font hangUpBtnFont = this.$$$getFont$$$("Arial Nova Light", -1, 26, hangUpBtn.getFont());
+        if (hangUpBtnFont != null) hangUpBtn.setFont(hangUpBtnFont);
+        hangUpBtn.setForeground(new Color(-65536));
+        hangUpBtn.setText("\uD83D\uDD7D");
+        hangUpBtn.setToolTipText("Hang up");
+        callProgressPanel.add(hangUpBtn, new com.intellij.uiDesigner.core.GridConstraints(0, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         furtherInfoPanel = new JPanel();
         furtherInfoPanel.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(1, 2, new Insets(0, 0, 0, 0), -1, -1));
         furtherInfoPanel.setAutoscrolls(false);
         furtherInfoPanel.setBackground(new Color(-1));
-        dataContainer.add(furtherInfoPanel, new com.intellij.uiDesigner.core.GridConstraints(2, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_VERTICAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        dataContainer.add(furtherInfoPanel, new com.intellij.uiDesigner.core.GridConstraints(1, 2, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_VERTICAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         usernamePrefix = new JLabel();
         Font usernamePrefixFont = this.$$$getFont$$$("Arial Nova Light", Font.ITALIC, 16, usernamePrefix.getFont());
         if (usernamePrefixFont != null) usernamePrefix.setFont(usernamePrefixFont);
@@ -303,13 +406,56 @@ public class NextWindow {
         if (usernameLabelBigFont != null) usernameLabelBig.setFont(usernameLabelBigFont);
         usernameLabelBig.setText("@theoneandonly");
         furtherInfoPanel.add(usernameLabelBig, new com.intellij.uiDesigner.core.GridConstraints(0, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final com.intellij.uiDesigner.core.Spacer spacer2 = new com.intellij.uiDesigner.core.Spacer();
+        dataContainer.add(spacer2, new com.intellij.uiDesigner.core.GridConstraints(2, 2, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_VERTICAL, 1, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        namePanelContainer = new JPanel();
+        namePanelContainer.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(2, 1, new Insets(0, 0, 0, 0), -1, -1));
+        namePanelContainer.setBackground(new Color(-1));
+        dataContainer.add(namePanelContainer, new com.intellij.uiDesigner.core.GridConstraints(0, 2, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        firstNamePanel = new JPanel();
+        firstNamePanel.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(2, 1, new Insets(0, 0, 0, 0), -1, -1));
+        firstNamePanel.setBackground(new Color(-1));
+        namePanelContainer.add(firstNamePanel, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        firstNameLabelBig = new JLabel();
+        Font firstNameLabelBigFont = this.$$$getFont$$$("Arial Nova Light", -1, 36, firstNameLabelBig.getFont());
+        if (firstNameLabelBigFont != null) firstNameLabelBig.setFont(firstNameLabelBigFont);
+        firstNameLabelBig.setForeground(new Color(-13224394));
+        firstNameLabelBig.setText("Rolf");
+        firstNamePanel.add(firstNameLabelBig, new com.intellij.uiDesigner.core.GridConstraints(1, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         final com.intellij.uiDesigner.core.Spacer spacer3 = new com.intellij.uiDesigner.core.Spacer();
-        dataContainer.add(spacer3, new com.intellij.uiDesigner.core.GridConstraints(3, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_VERTICAL, 1, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
-        final JPanel panel3 = new JPanel();
-        panel3.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
-        panel3.setBackground(new Color(-16775320));
-        panel3.setVisible(false);
-        rootPanel.add(panel3, BorderLayout.NORTH);
+        firstNamePanel.add(spacer3, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_VERTICAL, 1, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        surnamePanel = new JPanel();
+        surnamePanel.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
+        surnamePanel.setBackground(new Color(-1));
+        namePanelContainer.add(surnamePanel, new com.intellij.uiDesigner.core.GridConstraints(1, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        surnameLabelBig = new JLabel();
+        Font surnameLabelBigFont = this.$$$getFont$$$("Arial Nova Light", Font.BOLD, 36, surnameLabelBig.getFont());
+        if (surnameLabelBigFont != null) surnameLabelBig.setFont(surnameLabelBigFont);
+        surnameLabelBig.setText("Assfalg");
+        surnamePanel.add(surnameLabelBig, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        userStateBar = new JProgressBar();
+        userStateBar.setBackground(new Color(-1));
+        userStateBar.setForeground(new Color(-9501922));
+        userStateBar.setOrientation(1);
+        userStateBar.setStringPainted(false);
+        userStateBar.setToolTipText("This user is currently online");
+        userStateBar.setValue(100);
+        userStateBar.setVisible(false);
+        dataContainer.add(userStateBar, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_EAST, com.intellij.uiDesigner.core.GridConstraints.FILL_VERTICAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        userStatebar2 = new JLabel();
+        userStatebar2.setAlignmentY(0.0f);
+        userStatebar2.setBackground(new Color(-1));
+        Font userStatebar2Font = this.$$$getFont$$$("Arial Nova Cond Light", -1, 72, userStatebar2.getFont());
+        if (userStatebar2Font != null) userStatebar2.setFont(userStatebar2Font);
+        userStatebar2.setText("|");
+        dataContainer.add(userStatebar2, new com.intellij.uiDesigner.core.GridConstraints(0, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_NORTHWEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        statePanel = new JPanel();
+        statePanel.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
+        statePanel.setBackground(new Color(-1));
+        userPanel.add(statePanel, new com.intellij.uiDesigner.core.GridConstraints(1, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_SOUTH, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        stateDisplay = new JLabel();
+        stateDisplay.setText("this is the first state");
+        statePanel.add(stateDisplay, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     }
 
     /**

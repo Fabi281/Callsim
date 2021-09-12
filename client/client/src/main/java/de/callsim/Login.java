@@ -83,16 +83,6 @@ public class Login {
         isLogin = !isLogin;
     }
 
-    public void toggleLoginView2() {
-        int idx = tabpane.getSelectedIndex();
-
-        if (idx == 0) {
-            tabpane.setSelectedIndex(1); // according to https://stackoverflow.com/a/4157492, this should actually work
-        } else {
-            tabpane.setSelectedIndex(0);
-        }
-    }
-
     public void keyHandler(KeyEvent e) { // better way of handling, but still not the best solution: has to be applied to each new field of form
         int keycode = (int) e.getKeyChar(); // ref: https://stackoverflow.com/a/16939321, will also handle ENTER: ENTER's char will be empty when you print it because it is a newline.
         switch (keycode) {
