@@ -44,11 +44,17 @@ public class WebSocket {
                         && p.getPassword().equals(jsonMessage.getString("Password")))).findFirst().isPresent();
                 LOGGER.info("Login Bool: " + exists);
 
-                if (exists && SessionHandler.checkLogin(jsonMessage.getString("Username"))){
-                    session.getBasicRemote().sendText(Utils.buildResponse("PosLoginResponse", "Succesfully logged in!"));
+                if (exists && SessionHandler.checkLogin(jsonMessage.getString("Username"))) {
+                    session.getBasicRemote()
+                            .sendText(Utils.buildResponse("PosLoginResponse", "Succesfully logged in!"));
                     SessionHandler.addSession(session, jsonMessage.getString("Username"));
                 } else {
-                    session.getBasicRemote().sendText(Utils.buildResponse("NegLoginResponse", "Username does not exist or is already logged in!"));
+                    String msg;
+                    if (!exists)
+                        msg = "Username does not exist";
+                    else
+                        msg = "User is already logged in";
+                    session.getBasicRemote().sendText(Utils.buildResponse("NegLoginResponse", msg));
                 }
                 break;
 
@@ -56,11 +62,13 @@ public class WebSocket {
                 exists = users.stream().filter(p -> (p.getUsername().equals(jsonMessage.getString("Username"))))
                         .findFirst().isPresent();
                 if (exists) {
-                    session.getBasicRemote().sendText(Utils.buildResponse("NegRegisterResponse", "Username already in use!"));
+                    session.getBasicRemote()
+                            .sendText(Utils.buildResponse("NegRegisterResponse", "Username already in use!"));
                 } else {
                     User registerUser = new User(jsonMessage.getString("Username"), jsonMessage.getString("Password"));
                     Utils.registerUser(registerUser, DataLocation);
-                    session.getBasicRemote().sendText(Utils.buildResponse("PosRegisterResponse", "Successfully registered!"));
+                    session.getBasicRemote()
+                            .sendText(Utils.buildResponse("PosRegisterResponse", "Successfully registered!"));
                 }
                 break;
 
@@ -71,13 +79,14 @@ public class WebSocket {
             case "startCall":
                 SessionHandler.startCall(session, jsonMessage.getString("Username"));
                 break;
-                
+
             case "endCall":
                 SessionHandler.endCall(session, jsonMessage.getString("Username"), jsonMessage.getString("BBBServer"));
                 break;
 
             case "respondCall":
-                SessionHandler.respondToCall(session, jsonMessage.getString("Response"), jsonMessage.getString("Username"));
+                SessionHandler.respondToCall(session, jsonMessage.getString("Response"),
+                        jsonMessage.getString("Username"));
                 break;
 
             default:
@@ -91,7 +100,7 @@ public class WebSocket {
         try {
             SessionHandler.deleteSession(session);
         } catch (Exception e) {
-            LOGGER.info("Session war nicht im Handler"+ e.toString());
+            LOGGER.info("Session war nicht im Handler" + e.toString());
         }
     }
 
