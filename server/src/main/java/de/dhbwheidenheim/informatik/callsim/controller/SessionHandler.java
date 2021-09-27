@@ -62,20 +62,24 @@ public class SessionHandler {
 
     public static void startCall(Session initialSession, String userToCall) throws IOException{
 
+        String availableServer = BBBServer.entrySet().stream().filter(link -> link.getValue().equals("available")).findFirst().get().getKey();
+        BBBServer.put(availableServer, "inUse");
+
         sessions.get(initialSession).set(1, "inCall");
         sessions.get(activeUser.get(userToCall)).set(1, "inCall");
 
-        activeUser.get(userToCall).getBasicRemote().sendText(Utils.buildResponse("incomingCall", "Got called respond now"));
-        initialSession.getBasicRemote().sendText(Utils.buildResponse("startedCall", "Started Call waiting for response")); 
+        activeUser.get(userToCall).getBasicRemote().sendText(Utils.buildResponse("incomingCall", availableServer));
+        initialSession.getBasicRemote().sendText(Utils.buildResponse("startedCall", availableServer)); 
 
     }
 
     public static void endCall(Session initialSession, String userToReset, String usedServer) throws IOException{
 
+        BBBServer.put(usedServer, "available");
+
         sessions.get(initialSession).set(1, "Online");
         sessions.get(activeUser.get(userToReset)).set(1, "Online");  
-
-        BBBServer.put(usedServer, "available");
+        
         activeUser.get(userToReset).getBasicRemote().sendText(Utils.buildResponse("RemoteCallEnded", "The other Person ended the Call"));
         initialSession.getBasicRemote().sendText(Utils.buildResponse("SelfCallEnded", "You ended the Call"));
 
@@ -84,18 +88,14 @@ public class SessionHandler {
     public static void respondToCall(Session initialSession, String response, String user) throws IOException{
         
         if(response.equals("accept")){
-            
-            String availableServer = BBBServer.entrySet().stream().filter(link -> link.getValue().equals("available")).findFirst().get().getKey();
 
-            BBBServer.put(availableServer, "inUse");
-
-            initialSession.getBasicRemote().sendText(Utils.buildResponse("SelfCallAccepted", availableServer));
-            activeUser.get(user).getBasicRemote().sendText(Utils.buildResponse("RemoteCallAccepted", availableServer));
+            initialSession.getBasicRemote().sendText(Utils.buildResponse("SelfCallAccepted", "The call got accepted"));
+            activeUser.get(user).getBasicRemote().sendText(Utils.buildResponse("RemoteCallAccepted", "The call got accepted"));
 
         }else{
 
-            initialSession.getBasicRemote().sendText(Utils.buildResponse("SelfCallDeclined", "You declined the incoming Call")); 
-            activeUser.get(user).getBasicRemote().sendText(Utils.buildResponse("RemoteCallDeclined", "Your Call got declined"));
+            initialSession.getBasicRemote().sendText(Utils.buildResponse("SelfCallDeclined", "The call got declined")); 
+            activeUser.get(user).getBasicRemote().sendText(Utils.buildResponse("RemoteCallDeclined", "The call got accepted"));
             
         }
     }
