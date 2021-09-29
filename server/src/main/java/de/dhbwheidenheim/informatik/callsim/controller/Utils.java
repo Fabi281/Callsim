@@ -9,13 +9,11 @@ import java.io.ObjectOutputStream;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Map;
 
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,36 +67,13 @@ public class Utils {
 		return users;
 	}
 
-	public static String buildResponse(Collection<ArrayList<String>> User){
-
-		JsonArrayBuilder users = Json.createArrayBuilder();
-
-		for(ArrayList<String> u : User){
-			JsonObjectBuilder tokens = Json.createObjectBuilder();
-			tokens.add(u.get(0), u.get(1));
-			users.add(tokens);
-		}
-
-		JsonObject res = Json.createObjectBuilder()
-			.add("Action", "StatusResponse")
-			.add("User", users)
-            .build();
-
-        Writer writer = new StringWriter();
-        Json.createWriter(writer).write(res);
-		return writer.toString();
-
-	}
-
 	public static String buildResponse(Map<String, String> User){
 
 		JsonArrayBuilder users = Json.createArrayBuilder();
 
-		JsonObjectBuilder tokens = Json.createObjectBuilder();
 		User.forEach((k, v) -> {
-			tokens.add(k, v);
-		});
-		users.add(tokens);
+			users.add(Json.createObjectBuilder().add(k,v));
+		});	
 
 		JsonObject res = Json.createObjectBuilder()
 			.add("Action", "StatusResponse")
