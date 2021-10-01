@@ -2,7 +2,6 @@ package de.dhbwheidenheim.informatik.callsim.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,10 +36,6 @@ public class SessionHandler {
         sessions.remove(session);
     }
 
-    public static Collection<ArrayList<String>> userListWithStatus() throws IOException{
-        return sessions.values();
-    }
-
     public static Map<String, String> userListWithStatus(String location) throws IOException{
         Map<String, String> allUserStatuses = new HashMap<String, String>();
         for(ArrayList<String> user : sessions.values()){
@@ -62,14 +57,22 @@ public class SessionHandler {
 
     public static void startCall(Session initialSession, String userToCall) throws IOException{
 
-        String availableServer = BBBServer.entrySet().stream().filter(link -> link.getValue().equals("available")).findFirst().get().getKey();
-        BBBServer.put(availableServer, "inUse");
+        
+        var wrapper = new Object(){ String availableServer = ""; };
+        BBBServer.entrySet().stream().filter(link -> link.getValue().equals("available")).findFirst().ifPresent(s -> wrapper.availableServer = s.getKey());
+        
+        if(wrapper.availableServer.equals("")){
+            initialSession.getBasicRemote().sendText(Utils.buildResponse("CallFailed", "No Server available")); 
+            return;
+        }
+
+        BBBServer.put(wrapper.availableServer, "inUse");
 
         sessions.get(initialSession).set(1, "inCall");
         sessions.get(activeUser.get(userToCall)).set(1, "inCall");
 
-        activeUser.get(userToCall).getBasicRemote().sendText(Utils.buildResponse("incomingCall", availableServer));
-        initialSession.getBasicRemote().sendText(Utils.buildResponse("startedCall", availableServer)); 
+        activeUser.get(userToCall).getBasicRemote().sendText(Utils.buildResponse("incomingCall", wrapper.availableServer));
+        initialSession.getBasicRemote().sendText(Utils.buildResponse("startedCall", wrapper.availableServer)); 
 
     }
 
