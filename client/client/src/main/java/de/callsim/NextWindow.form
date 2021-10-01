@@ -30,7 +30,7 @@
             </properties>
             <border type="none"/>
             <children>
-              <grid id="1fecb" binding="listUserTemplate" layout-manager="GridLayoutManager" row-count="2" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="1fecb" binding="listUserTemplate" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="0" left="0" bottom="0" right="0"/>
                 <constraints>
                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="7" anchor="1" fill="1" indent="0" use-parent-layout="false"/>
@@ -42,51 +42,17 @@
                   <color color="-1973791"/>
                 </border>
                 <children>
-                  <grid id="df508" binding="namePanel" layout-manager="GridLayoutManager" row-count="1" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-                    <margin top="0" left="0" bottom="0" right="0"/>
+                  <component id="1dcf3" class="javax.swing.JButton" binding="userBtn1">
                     <constraints>
-                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
                       <background color="-16775320"/>
+                      <font name="Arial Nova Light" size="16"/>
+                      <foreground color="-1"/>
+                      <text value="Rolf Assfalg"/>
                     </properties>
-                    <border type="none"/>
-                    <children>
-                      <component id="6eceb" class="javax.swing.JLabel" binding="name1">
-                        <constraints>
-                          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                        </constraints>
-                        <properties>
-                          <font name="Arial Nova Light" size="16" style="0"/>
-                          <foreground color="-1"/>
-                          <text value="Rolf"/>
-                          <visible value="false"/>
-                        </properties>
-                      </component>
-                      <component id="51e0b" class="javax.swing.JLabel" binding="surname1">
-                        <constraints>
-                          <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                        </constraints>
-                        <properties>
-                          <font name="Arial Nova Light" size="16" style="0"/>
-                          <foreground color="-1"/>
-                          <text value="Assfalg"/>
-                          <visible value="false"/>
-                        </properties>
-                      </component>
-                      <component id="1dcf3" class="javax.swing.JButton" binding="userBtn1">
-                        <constraints>
-                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                        </constraints>
-                        <properties>
-                          <background color="-16775320"/>
-                          <font name="Arial Nova Light" size="16"/>
-                          <foreground color="-1"/>
-                          <text value="Rolf Assfalg"/>
-                        </properties>
-                      </component>
-                    </children>
-                  </grid>
+                  </component>
                   <component id="93e9d" class="javax.swing.JButton" binding="callUserDirectlyBtn">
                     <constraints>
                       <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="4" fill="2" indent="0" use-parent-layout="false"/>
@@ -102,18 +68,9 @@
                       <text value="📞"/>
                     </properties>
                   </component>
-                  <component id="4d8d0" class="javax.swing.JLabel">
-                    <constraints>
-                      <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties>
-                      <text value="theoneandonly"/>
-                      <visible value="false"/>
-                    </properties>
-                  </component>
                 </children>
               </grid>
-              <grid id="483a9" layout-manager="GridLayoutManager" row-count="2" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="483a9" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="0" left="0" bottom="0" right="0"/>
                 <constraints>
                   <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="7" anchor="1" fill="1" indent="0" use-parent-layout="false"/>
@@ -125,7 +82,7 @@
                   <color color="-1973791"/>
                 </border>
                 <children>
-                  <grid id="cd4e2" layout-manager="GridLayoutManager" row-count="1" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                  <grid id="cd4e2" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                     <margin top="0" left="0" bottom="0" right="0"/>
                     <constraints>
                       <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -135,28 +92,6 @@
                     </properties>
                     <border type="none"/>
                     <children>
-                      <component id="eb754" class="javax.swing.JLabel">
-                        <constraints>
-                          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                        </constraints>
-                        <properties>
-                          <font name="Arial Nova Light" size="16" style="0"/>
-                          <foreground color="-1"/>
-                          <text value="Bernd"/>
-                          <visible value="false"/>
-                        </properties>
-                      </component>
-                      <component id="fceac" class="javax.swing.JLabel">
-                        <constraints>
-                          <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                        </constraints>
-                        <properties>
-                          <font name="Arial Nova Light" size="16" style="0"/>
-                          <foreground color="-1"/>
-                          <text value="Mayinger"/>
-                          <visible value="false"/>
-                        </properties>
-                      </component>
                       <component id="55d83" class="javax.swing.JButton" binding="userBtn2">
                         <constraints>
                           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
@@ -183,15 +118,6 @@
                       <horizontalAlignment value="4"/>
                       <label value="📞"/>
                       <text value="📞"/>
-                    </properties>
-                  </component>
-                  <component id="2db9d" class="javax.swing.JLabel">
-                    <constraints>
-                      <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties>
-                      <text value="der-bernd"/>
-                      <visible value="false"/>
                     </properties>
                   </component>
                 </children>
