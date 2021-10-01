@@ -5,6 +5,7 @@ import java.io.StringReader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.json.Json;
@@ -53,11 +54,16 @@ public class WebsocketClientEndpoint {
         JsonReader reader = Json.createReader(new StringReader(message));
         JsonObject jsonMessage = reader.readObject();
         String action = jsonMessage.getString("Action");
+        String value;
 
         switch (action) {
             case "PosLoginResponse":
                 System.out.println(jsonMessage.getString("Value"));
-                client.showAppPage();
+                JsonObject json = Json.createObjectBuilder()
+                        .add("action", "UserStatuses")
+                        .build();
+                // send UserStatuses message to websocket
+                client.clientEndPoint.sendMessage(json);
                 break;
 
             case "NegLoginResponse":
@@ -65,26 +71,33 @@ public class WebsocketClientEndpoint {
                 break;
 
             case "PosRegisterResponse":
-                System.out.println(jsonMessage.getString("Value"));
+                value = jsonMessage.getString("Value");
+                System.out.println(value);
+                Login.popupMessage(value);
                 break;
 
             case "NegRegisterResponse":
-                System.out.println(jsonMessage.getString("Value"));
+                value = jsonMessage.getString("Value");
+                System.out.println(value);
+                Login.popupMessage(value);
                 break;
 
             case "StatusResponse":
                 JsonArray user = jsonMessage.getJsonArray("User");
-                List<List<JsonObject>> list = new ArrayList<List<JsonObject>>();
-
+                List<JsonObject> list = new ArrayList<JsonObject>();
+                HashMap<String, String> userData = new HashMap();
                 for(int i = 0; i < user.size(); i++){
-                    List<JsonObject> tmp = new ArrayList<JsonObject>();
-                    tmp.add(user.getJsonObject(i));
-                    list.add(tmp);
+                    list.add(user.getJsonObject(i));
                 }
 
-                list.forEach(s -> System.out.println(s));
+                list.forEach(object -> {
+                    for (String key: object.keySet()){
+                        System.out.println(key + ": " + object.get(key));
+                        userData.put(key, key + ",Test," +object.get(key));
+                    }
+                });
+                client.showAppPage(userData);
                 break;
-
             case "NotFound":
                 System.out.println(jsonMessage.getString("Value"));
                 break;

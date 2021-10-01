@@ -3,6 +3,7 @@ package de.callsim;
 import java.awt.*;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.HashMap;
 
 import javax.swing.*;
 
@@ -39,10 +40,10 @@ public class client {
         frame.setVisible(true);
     }
 
-    public static void showAppPage(){
+    public static void showAppPage(HashMap<String, String> userData){
         if(frame == null) frame = new JFrame("CallSim"); /* just to make sure */
         frame.setTitle("CallSim App");
-        frame.setContentPane(new NextWindow().rootPanel);
+        frame.setContentPane(new NextWindow(userData).rootPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setMinimumSize(new Dimension(400, 450)); // ref: https://stackoverflow.com/a/2782041
         frame.pack();

@@ -15,8 +15,6 @@ import java.util.HashMap;
 
 public class NextWindow {
     JPanel rootPanel;
-    JLabel name1;
-    JLabel surname1;
     JButton call;
     JPanel listPanel;
     JButton callUserDirectlyBtn;
@@ -33,7 +31,6 @@ public class NextWindow {
     JLabel usernamePrefix;
     JLabel firstNameLabelBig;
     JLabel surnameLabelBig;
-    JPanel namePanel;
     JButton userBtn1;
     JButton userBtn2;
     JLabel numberOfUsers;
@@ -55,12 +52,10 @@ public class NextWindow {
 
     boolean callInProgress = false;
 
-    HashMap<String, String> userData = new HashMap<>();
-
     HashMap<String, String> stateColors = new HashMap<String, String>() {{
-        put("online", "0,166,0;This user is online and available");
-        put("busy", "249,179,96;This user is online but currently in another call");
-        put("offline", "111,3,30;This user is not online");
+        put("Online", "0,166,0;This user is online and available");
+        put("Busy", "249,179,96;This user is online but currently in another call");
+        put("Offline", "111,3,30;This user is not online");
 
     }};
 
@@ -69,9 +64,28 @@ public class NextWindow {
 
     // no idea (yet) how dynamic rendering can be realized
 
-    public NextWindow() {
-        userData.put("der-bernd", "Mayinger,Bernd,online");
-        userData.put("theoneandonly", "Assfalg,Rolf,busy");
+    public NextWindow(HashMap<String, String> userData) {
+        listPanel.setLayout(new GridLayout(0, 1));
+        for (String key : userData.keySet()){
+            JPanel btnGroup = new JPanel();
+            btnGroup.setOpaque(false);
+            JButton userBtn = new JButton(key);
+            userBtn.setForeground(Color.white);
+            userBtn.setOpaque(false);
+            userBtn.setContentAreaFilled(false);
+            userBtn.setBorderPainted(false);
+            JButton callBtn = new JButton("\uD83D\uDCDE");
+            callBtn.setForeground(Color.white);
+            callBtn.setOpaque(false);
+            callBtn.setContentAreaFilled(false);
+            callBtn.setBorderPainted(false);
+            btnGroup.setLayout(new GridLayout(1, 2));
+            btnGroup.add(userBtn);
+            btnGroup.add(callBtn);
+            System.out.println("add to Panel");
+            listPanel.add(btnGroup);
+        }
+
         numberOfUsers.setText(userData.size() + " user" + (userData.size() != 1 ? "s" : "") + " registered");
         updateCallDisplay();
 
@@ -95,26 +109,18 @@ public class NextWindow {
                 startACall(user);
             }
         });
-        namePanel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
-                String targetUser = "theoneandonly";
-                updateBigDisplay(targetUser);
-            }
-        });
         userBtn1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String targetUser = "theoneandonly";
-                updateBigDisplay(targetUser);
+                updateBigDisplay(userData, targetUser);
             }
         });
         userBtn2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String targetUser = "der-bernd";
-                updateBigDisplay(targetUser);
+                updateBigDisplay(userData, targetUser);
             }
         });
         hangUpBtn.addActionListener(new ActionListener() {
@@ -125,7 +131,7 @@ public class NextWindow {
         });
     }
 
-    public void updateBigDisplay(String newUsername) {
+    public void updateBigDisplay(HashMap<String, String> userData, String newUsername) {
         if (callInProgress) return; /* if a call is in progress, abort */
         String dataOfUser = userData.get(newUsername);
         if (dataOfUser == null) return;

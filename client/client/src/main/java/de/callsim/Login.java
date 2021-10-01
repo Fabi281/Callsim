@@ -125,10 +125,13 @@ public class Login {
             // send LOGIN message to websocket
             client.clientEndPoint.sendMessage(value);
         }
+        else {
+            popupMessage("Passwords do not match!");
+        }
 
     }
 
-    public void popupMessage(String msg) {
+    public static void popupMessage(String msg) {
         JOptionPane.showMessageDialog(null, msg);
     }
 
