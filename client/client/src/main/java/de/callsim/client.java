@@ -12,9 +12,7 @@ public class client {
     public static WebsocketClientEndpoint clientEndPoint;
 
     public static void main(String[] args) {
-
         if(ConnectionInit()) showLoginPage();
-
     }
 
     public static boolean ConnectionInit(){
@@ -27,6 +25,10 @@ public class client {
             System.err.println("URISyntaxException exception: " + ex.getMessage());
             return false;
         }
+    }
+
+    public static void popupMessage(String msg) {
+        JOptionPane.showMessageDialog(null, msg);
     }
 
     public static void showLoginPage(){

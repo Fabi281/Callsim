@@ -32,6 +32,7 @@ public class WebsocketClientEndpoint {
             WebSocketContainer container = ContainerProvider.getWebSocketContainer();
             container.connectToServer(this, endpointURI);
         } catch (Exception e) {
+            client.popupMessage("Server is not active.\n" + e.toString());
             throw new RuntimeException(e);
         }
     }
@@ -73,13 +74,13 @@ public class WebsocketClientEndpoint {
             case "PosRegisterResponse":
                 value = jsonMessage.getString("Value");
                 System.out.println(value);
-                Login.popupMessage(value);
+                client.popupMessage(value);
                 break;
 
             case "NegRegisterResponse":
                 value = jsonMessage.getString("Value");
                 System.out.println(value);
-                Login.popupMessage(value);
+                client.popupMessage(value);
                 break;
 
             case "StatusResponse":
@@ -93,7 +94,7 @@ public class WebsocketClientEndpoint {
                 list.forEach(object -> {
                     for (String key: object.keySet()){
                         System.out.println(key + ": " + object.get(key));
-                        userData.put(key, key + ",Test," +object.get(key));
+                        userData.put(key, object.get(key).toString());
                     }
                 });
                 client.showAppPage(userData);

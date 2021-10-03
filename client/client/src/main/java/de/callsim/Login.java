@@ -126,13 +126,9 @@ public class Login {
             client.clientEndPoint.sendMessage(value);
         }
         else {
-            popupMessage("Passwords do not match!");
+            client.popupMessage("Passwords do not match!");
         }
 
-    }
-
-    public static void popupMessage(String msg) {
-        JOptionPane.showMessageDialog(null, msg);
     }
 
 }
