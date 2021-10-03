@@ -10,6 +10,9 @@ import javax.swing.*;
 public class client {
     private static JFrame frame;
     public static WebsocketClientEndpoint clientEndPoint;
+    public static Login loginPage;
+    public static NextWindow nwPage;
+    public static String username;
 
     public static void main(String[] args) {
         if(ConnectionInit()) showLoginPage();
@@ -19,6 +22,7 @@ public class client {
         try {
             // open websocket
             clientEndPoint = new WebsocketClientEndpoint(new URI("ws://localhost:8787/ws"));
+            loginPage =  new Login();
             return true;
 
         } catch (URISyntaxException ex) {
@@ -33,7 +37,7 @@ public class client {
 
     public static void showLoginPage(){
         frame = new JFrame("CallSim Login");
-        frame.setContentPane(new Login().root_panel);
+        frame.setContentPane(loginPage.root_panel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Dimension size = new Dimension(600,500);
         frame.setMinimumSize(size);
@@ -42,10 +46,10 @@ public class client {
         frame.setVisible(true);
     }
 
-    public static void showAppPage(HashMap<String, String> userData){
+    public static void showAppPage(){
         if(frame == null) frame = new JFrame("CallSim"); /* just to make sure */
         frame.setTitle("CallSim App");
-        frame.setContentPane(new NextWindow(userData).rootPanel);
+        frame.setContentPane(nwPage.rootPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setMinimumSize(new Dimension(400, 450)); // ref: https://stackoverflow.com/a/2782041
         frame.pack();

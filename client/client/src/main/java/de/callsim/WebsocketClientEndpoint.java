@@ -60,11 +60,9 @@ public class WebsocketClientEndpoint {
         switch (action) {
             case "PosLoginResponse":
                 System.out.println(jsonMessage.getString("Value"));
-                JsonObject json = Json.createObjectBuilder()
-                        .add("action", "UserStatuses")
-                        .build();
-                // send UserStatuses message to websocket
-                client.clientEndPoint.sendMessage(json);
+                client.username = jsonMessage.getString("Value");
+                client.nwPage = new NextWindow();
+                client.showAppPage();
                 break;
 
             case "NegLoginResponse":
@@ -88,7 +86,7 @@ public class WebsocketClientEndpoint {
                 List<JsonObject> list = new ArrayList<JsonObject>();
                 HashMap<String, String> userData = new HashMap();
                 for(int i = 0; i < user.size(); i++){
-                    list.add(user.getJsonObject(i));
+                    if(!user.getJsonObject(i).containsKey(client.username)) list.add(user.getJsonObject(i));
                 }
 
                 list.forEach(object -> {
@@ -97,7 +95,7 @@ public class WebsocketClientEndpoint {
                         userData.put(key, object.get(key).toString());
                     }
                 });
-                client.showAppPage(userData);
+                client.nwPage.getListResponse(userData);
                 break;
             case "NotFound":
                 System.out.println(jsonMessage.getString("Value"));

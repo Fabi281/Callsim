@@ -1,5 +1,7 @@
 package de.callsim;
 
+import javax.json.Json;
+import javax.json.JsonObject;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.plaf.FontUIResource;
@@ -12,6 +14,8 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class NextWindow {
     JPanel rootPanel;
@@ -45,6 +49,7 @@ public class NextWindow {
 
     boolean callInProgress = false;
 
+    HashMap<String, String> userData = new HashMap<String, String>();
     HashMap<String, String> stateColors = new HashMap<String, String>() {{
         put("\"Online\"", "0,166,0;This user is online and available");
         put("\"Busy\"", "249,179,96;This user is online but currently in another call");
@@ -57,27 +62,16 @@ public class NextWindow {
 
     // no idea (yet) how dynamic rendering can be realized
 
-    public NextWindow(HashMap<String, String> userData) {
-        listPanel.setLayout(new GridLayout(0, 1));
-        for (String key : userData.keySet()){
-            UserItem item = new UserItem(key);
-            item.getUserBtn().addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    updateBigDisplay(userData, key);
-                }
-            });
-            item.getCallBtn().addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    startACall(key);
-                }
-            });
-            listPanel.add(item);
-        }
-
-        numberOfUsers.setText(userData.size() + " user" + (userData.size() != 1 ? "s" : "") + " registered");
-        updateCallDisplay();
+    public NextWindow() {
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(
+                new TimerTask(){
+                    @Override
+                    public void run(){
+                        if(!callInProgress) sentListRequest();
+                    }
+                }, 0, 5000
+        );
 
         log = new ArrayList<String>();
 
@@ -140,6 +134,38 @@ public class NextWindow {
         firstNameLabelBig.setText(nameOfUser);
         userStatebar2.setForeground(new Color(colorR, colorG, colorB));
         userStatebar2.setToolTipText(stateTooltip);
+    }
+
+    public void sentListRequest(){
+        JsonObject json = Json.createObjectBuilder()
+                .add("action", "UserStatuses")
+                .build();
+        // send UserStatuses message to websocket
+        client.clientEndPoint.sendMessage(json);
+    }
+
+    public void getListResponse(HashMap<String, String> userData){
+        this.userData = userData;
+        System.out.println(userData);
+        for(Component comp : listPanel.getComponents()){
+            listPanel.remove(comp);
+        }
+        listPanel.setLayout(new GridLayout(0, 1));
+        for (String key : userData.keySet()){
+            UserItem item = new UserItem(key);
+            item.getUserBtn().addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    updateBigDisplay(userData, key);
+                }
+            });
+            listPanel.add(item);
+
+        }
+        listPanel.add(numberOfUsers);
+        numberOfUsers.setText(userData.size() + " user" + (userData.size() != 1 ? "s" : "") + " registered");
+        listPanel.revalidate();
+        updateCallDisplay();
     }
 
     public void startACall(String targetUser) {

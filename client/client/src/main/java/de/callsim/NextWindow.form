@@ -317,7 +317,7 @@
                                     <properties>
                                       <font name="Arial Nova Light" size="36"/>
                                       <foreground color="-13224394"/>
-                                      <text value="Rolf"/>
+                                      <text value="Welcome to CallSim"/>
                                     </properties>
                                   </component>
                                   <vspacer id="39c07">
