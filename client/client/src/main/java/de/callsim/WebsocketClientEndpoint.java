@@ -83,7 +83,7 @@ public class WebsocketClientEndpoint {
 
             case "StatusResponse":
                 JsonArray user = jsonMessage.getJsonArray("User");
-                List<JsonObject> list = new ArrayList<JsonObject>();
+                List<JsonObject> list = new ArrayList<>();
                 HashMap<String, String> userData = new HashMap();
                 for(int i = 0; i < user.size(); i++){
                     if(!user.getJsonObject(i).containsKey(client.username)) list.add(user.getJsonObject(i));
@@ -103,6 +103,7 @@ public class WebsocketClientEndpoint {
 
             case "incomingCall":
                 System.out.println(jsonMessage.getString("Value"));
+                client.popupMessage("Call Incoming...");
                 break;
 
             case "startedCall":

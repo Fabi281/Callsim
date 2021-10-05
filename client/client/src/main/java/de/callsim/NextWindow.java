@@ -21,17 +21,13 @@ public class NextWindow {
     JPanel rootPanel;
     JButton call;
     JPanel listPanel;
-    JButton callUserDirectlyBtn;
     JPanel userPanel;
-    JPanel listUserTemplate;
     JPanel blueBg;
     JPanel dataContainer;
     JPanel firstNamePanel;
     JPanel actionPanel;
     JPanel whiteBg;
     JLabel firstNameLabelBig;
-    JButton userBtn1;
-    JButton userBtn2;
     JLabel numberOfUsers;
     JPanel callContainer;
     JPanel callProgressPanel;
@@ -47,9 +43,10 @@ public class NextWindow {
     ArrayList<String> log;
     final int maxLogs = 10;
 
+    private String selectedUser = null;
     boolean callInProgress = false;
 
-    HashMap<String, String> userData = new HashMap<String, String>();
+    HashMap<String, String> userData = new HashMap<>();
     HashMap<String, String> stateColors = new HashMap<String, String>() {{
         put("\"Online\"", "0,166,0;This user is online and available");
         put("\"Busy\"", "249,179,96;This user is online but currently in another call");
@@ -63,6 +60,7 @@ public class NextWindow {
     // no idea (yet) how dynamic rendering can be realized
 
     public NextWindow() {
+        callContainer.setVisible(false);
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(
                 new TimerTask(){
@@ -70,41 +68,14 @@ public class NextWindow {
                     public void run(){
                         if(!callInProgress) sentListRequest();
                     }
-                }, 0, 5000
+                }, 0, 10000
         );
-
         log = new ArrayList<String>();
 
         call.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // code here will be executed after clicking on CALL
-
-                /*JOptionPane.showMessageDialog(null, "lorem");*/
-
-                String user = "der-bernd"; /* propably better way: giving userId as param */
-                startACall(user);
-            }
-        });
-        callUserDirectlyBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String user = "der-bernd"; /* propably better way: giving userId as param */
-                startACall(user);
-            }
-        });
-        userBtn1.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String targetUser = "theoneandonly";
-                updateBigDisplay(userData, targetUser);
-            }
-        });
-        userBtn2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String targetUser = "der-bernd";
-                updateBigDisplay(userData, targetUser);
+                startACall(selectedUser);
             }
         });
         hangUpBtn.addActionListener(new ActionListener() {
@@ -113,6 +84,49 @@ public class NextWindow {
                 cancelCall();
             }
         });
+    }
+
+    public void sentListRequest(){
+        JsonObject json = Json.createObjectBuilder()
+                .add("action", "UserStatuses")
+                .build();
+        // send UserStatuses message to websocket
+        client.clientEndPoint.sendMessage(json);
+    }
+
+    public void getListResponse(HashMap<String, String> userData){
+        this.userData = userData;
+        System.out.println(userData);
+        for(Component comp : listPanel.getComponents()){
+            listPanel.remove(comp);
+        }
+        listPanel.setLayout(new GridLayout(0, 1));
+        for (String key : userData.keySet()){
+            UserItem item = new UserItem(key);
+            item.getUserBtn().addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    selectedUser = key;
+                    updateCallDisplay();
+                    updateBigDisplay(userData, key);
+                }
+            });
+            listPanel.add(item);
+
+        }
+        listPanel.add(numberOfUsers);
+        numberOfUsers.setText(userData.size() + " user" + (userData.size() != 1 ? "s" : "") + " registered");
+        listPanel.revalidate();
+        updateCallDisplay();
+    }
+
+    public void sendCall(String targetUser){
+        JsonObject json = Json.createObjectBuilder()
+                .add("action", "startCall")
+                .add("Username", targetUser)
+                .build();
+        // send UserStatuses message to websocket
+        client.clientEndPoint.sendMessage(json);
     }
 
     public void updateBigDisplay(HashMap<String, String> userData, String newUsername) {
@@ -136,41 +150,10 @@ public class NextWindow {
         userStatebar2.setToolTipText(stateTooltip);
     }
 
-    public void sentListRequest(){
-        JsonObject json = Json.createObjectBuilder()
-                .add("action", "UserStatuses")
-                .build();
-        // send UserStatuses message to websocket
-        client.clientEndPoint.sendMessage(json);
-    }
-
-    public void getListResponse(HashMap<String, String> userData){
-        this.userData = userData;
-        System.out.println(userData);
-        for(Component comp : listPanel.getComponents()){
-            listPanel.remove(comp);
-        }
-        listPanel.setLayout(new GridLayout(0, 1));
-        for (String key : userData.keySet()){
-            UserItem item = new UserItem(key);
-            item.getUserBtn().addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    updateBigDisplay(userData, key);
-                }
-            });
-            listPanel.add(item);
-
-        }
-        listPanel.add(numberOfUsers);
-        numberOfUsers.setText(userData.size() + " user" + (userData.size() != 1 ? "s" : "") + " registered");
-        listPanel.revalidate();
-        updateCallDisplay();
-    }
-
     public void startACall(String targetUser) {
         log("Starting new call...");
         setCallDisplay(true);
+        sendCall(targetUser);
 
         /* request logic here */
         boolean browserOpen = true; /* simulating establishment of connection */
@@ -206,7 +189,7 @@ public class NextWindow {
     }
 
     private void updateCallDisplay() {
-        callContainer.setVisible(!callInProgress);
+        callContainer.setVisible(!callInProgress && selectedUser != null);
         callProgressPanel.setVisible(callInProgress);
 
         listPanel.setEnabled(!callInProgress); /* when call in progress, disable the sidebar */
