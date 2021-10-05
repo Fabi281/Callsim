@@ -57,7 +57,10 @@ public class SessionHandler {
 
     public static void startCall(Session initialSession, String userToCall) throws IOException{
 
-        
+        if(sessions.get(initialSession).get(1).equals("inCall") || sessions.get(activeUser.get(userToCall)).get(1).equals("inCall")){
+            initialSession.getBasicRemote().sendText(Utils.buildResponse("Busy", "You or the other Person ist already in a Call"));  
+            return;
+        }
         var wrapper = new Object(){ String availableServer = ""; };
         BBBServer.entrySet().stream().filter(link -> link.getValue().equals("available")).findFirst().ifPresent(s -> wrapper.availableServer = s.getKey());
         
@@ -92,8 +95,8 @@ public class SessionHandler {
         
         if(response.equals("accept")){
 
-            initialSession.getBasicRemote().sendText(Utils.buildResponse("SelfCallAccepted", "The call got accepted"));
-            activeUser.get(user).getBasicRemote().sendText(Utils.buildResponse("RemoteCallAccepted", "The call got accepted"));
+            initialSession.getBasicRemote().sendText(Utils.buildResponse("SelfCallAccepted", usedServer));
+            activeUser.get(user).getBasicRemote().sendText(Utils.buildResponse("RemoteCallAccepted", usedServer));
 
         }else if(response.equals("selfdecline")){
 
