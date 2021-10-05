@@ -49,7 +49,7 @@ public class NextWindow {
     HashMap<String, String> userData = new HashMap<>();
     HashMap<String, String> stateColors = new HashMap<String, String>() {{
         put("\"Online\"", "0,166,0;This user is online and available");
-        put("\"Busy\"", "249,179,96;This user is online but currently in another call");
+        put("\"inCall\"", "249,179,96;This user is online but currently in another call");
         put("\"Offline\"", "111,3,30;This user is not online");
 
     }};

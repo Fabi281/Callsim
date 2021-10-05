@@ -8,6 +8,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import java.awt.Desktop;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+
 import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
@@ -102,8 +107,9 @@ public class WebsocketClientEndpoint {
                 break;
 
             case "incomingCall":
-                System.out.println(jsonMessage.getString("Value"));
-                client.popupMessage("Call Incoming...");
+                String bbbserver = jsonMessage.getString("Value");
+                String username = jsonMessage.getString("Username");
+                client.incomingCall("Call Incoming from " + username + "...", username, bbbserver);
                 break;
 
             case "startedCall":
@@ -120,10 +126,14 @@ public class WebsocketClientEndpoint {
 
             case "SelfCallAccepted":
                 System.out.println(jsonMessage.getString("Value"));
+                System.out.println("SelfCallAccepted");
+                openURL("https://www.google.com");
                 break;
 
             case "RemoteCallAccepted":
                 System.out.println(jsonMessage.getString("Value"));
+                System.out.println("RemoteCallAccepted");
+                openURL("https://www.google.com");
                 break;
 
             case "SelfCallDeclined":
@@ -141,6 +151,18 @@ public class WebsocketClientEndpoint {
 
     public void sendMessage(JsonObject json) {
         this.userSession.getAsyncRemote().sendObject(json);
+    }
+
+    private void openURL(String bbburl){
+        Desktop desktop = java.awt.Desktop.getDesktop();
+        try {
+            //specify the protocol along with the URL
+            URI oURL = new URI(bbburl);
+            desktop.browse(oURL);
+        } catch (URISyntaxException | IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
 }

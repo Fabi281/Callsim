@@ -94,6 +94,8 @@ public class SessionHandler {
 
             initialSession.getBasicRemote().sendText(Utils.buildResponse("SelfCallAccepted", "The call got accepted"));
             activeUser.get(user).getBasicRemote().sendText(Utils.buildResponse("RemoteCallAccepted", "The call got accepted"));
+            System.out.println(initialSession);
+            System.out.println(activeUser.get(user));
 
         }else if(response.equals("selfdecline")){
 

@@ -5,6 +5,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
 
+import javax.json.Json;
+import javax.json.JsonObject;
 import javax.swing.*;
 
 public class client {
@@ -33,6 +35,26 @@ public class client {
 
     public static void popupMessage(String msg) {
         JOptionPane.showMessageDialog(null, msg);
+    }
+
+    public static void incomingCall(String msg, String username, String bbbserver){
+        int input = JOptionPane.showOptionDialog(null, msg, "Call", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, null);
+
+        if(input == JOptionPane.OK_OPTION)
+        {
+            System.out.println("Hello World");
+            JsonObject value = Json.createObjectBuilder()
+                    .add("action", "respondCall")
+                    .add("Response", "accept")
+                    .add("Username", username)
+                    .add("BBBServer", bbbserver)
+                    .build();
+            // send LOGIN message to websocket
+            client.clientEndPoint.sendMessage(value);
+        }
+        else if (input == JOptionPane.CANCEL_OPTION){
+
+        }
     }
 
     public static void showLoginPage(){
