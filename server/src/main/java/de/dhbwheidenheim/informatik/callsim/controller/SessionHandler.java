@@ -88,12 +88,16 @@ public class SessionHandler {
 
     }
 
-    public static void respondToCall(Session initialSession, String response, String user) throws IOException{
+    public static void respondToCall(Session initialSession, String response, String user, String usedServer) throws IOException{
         
         if(response.equals("accept")){
 
             initialSession.getBasicRemote().sendText(Utils.buildResponse("SelfCallAccepted", "The call got accepted"));
             activeUser.get(user).getBasicRemote().sendText(Utils.buildResponse("RemoteCallAccepted", "The call got accepted"));
+
+        }else if(response.equals("selfdecline")){
+
+            endCall(initialSession, user, usedServer);
 
         }else{
 

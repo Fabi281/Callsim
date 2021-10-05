@@ -86,7 +86,7 @@ public class WebSocket {
 
             case "respondCall":
                 SessionHandler.respondToCall(session, jsonMessage.getString("Response"),
-                        jsonMessage.getString("Username"));
+                        jsonMessage.getString("Username"), jsonMessage.getString("BBBServer"));
                 break;
 
             default:
