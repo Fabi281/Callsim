@@ -71,7 +71,7 @@ public class SessionHandler {
         sessions.get(initialSession).set(1, "inCall");
         sessions.get(activeUser.get(userToCall)).set(1, "inCall");
 
-        activeUser.get(userToCall).getBasicRemote().sendText(Utils.buildResponse("incomingCall", wrapper.availableServer));
+        activeUser.get(userToCall).getBasicRemote().sendText(Utils.buildResponse("incomingCall", wrapper.availableServer, sessions.get(initialSession).get(0)));
         initialSession.getBasicRemote().sendText(Utils.buildResponse("startedCall", wrapper.availableServer)); 
 
     }

@@ -98,4 +98,17 @@ public class Utils {
 		return writer.toString();
 
 	}
+	public static String buildResponse(String Action, String Value, String Username){
+
+		JsonObject res = Json.createObjectBuilder()
+            .add("Action", Action)
+            .add("Value", Value)
+			.add("Username", Username)
+            .build();
+
+        Writer writer = new StringWriter();
+        Json.createWriter(writer).write(res);
+		return writer.toString();
+
+	}
 }
