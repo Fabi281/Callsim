@@ -40,9 +40,8 @@ public class NextWindow {
     JPanel statePanel;
     JLabel stateDisplay;
 
-    ArrayList<String> log;
+    public ArrayList<String> log;
     final int maxLogs = 10;
-
     private String selectedUser = null;
     boolean callInProgress = false;
 
@@ -56,10 +55,9 @@ public class NextWindow {
 
     /* ref: https://www.baeldung.com/java-initialize-hashmap#the-static-initializer-for-a-static-hashmap*/
 
-
-    // no idea (yet) how dynamic rendering can be realized
-
     public NextWindow() {
+        log = new ArrayList<String>();
+        log(client.username + " logged in");
         callContainer.setVisible(false);
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(
@@ -70,7 +68,6 @@ public class NextWindow {
                     }
                 }, 0, 10000
         );
-        log = new ArrayList<String>();
 
         call.addActionListener(new ActionListener() {
             @Override
@@ -120,13 +117,31 @@ public class NextWindow {
         updateCallDisplay();
     }
 
-    public void sendCall(String targetUser){
+    public void startACall(String targetUser) {
+        log("Starting new call...");
+        setCallDisplay(true);
         JsonObject json = Json.createObjectBuilder()
                 .add("action", "startCall")
                 .add("Username", targetUser)
                 .build();
         // send UserStatuses message to websocket
         client.clientEndPoint.sendMessage(json);
+        /* request logic here */
+    }
+
+    public void cancelCall() {
+
+        log("Cancelling call...");
+        setCallDisplay(false);
+        JsonObject value = Json.createObjectBuilder()
+                .add("action", "respondCall")
+                .add("Response", "selfdecline")
+                .add("Username", selectedUser)
+                .add("BBBServer", client.bbbserver)
+                .build();
+        // send respondCall message to websocket
+        client.clientEndPoint.sendMessage(value);
+        log("Call has been successfully cancelled");
     }
 
     public void updateBigDisplay(HashMap<String, String> userData, String newUsername) {
@@ -150,24 +165,6 @@ public class NextWindow {
         userStatebar2.setToolTipText(stateTooltip);
     }
 
-    public void startACall(String targetUser) {
-        log("Starting new call...");
-        setCallDisplay(true);
-        sendCall(targetUser);
-
-        /* request logic here */
-        boolean browserOpen = true; /* simulating establishment of connection */
-        if (browserOpen) log("Connection established");
-    }
-
-    public void cancelCall() {
-        log("Cancelling call...");
-        /* request logic here */
-
-        setCallDisplay(false);
-        log("Call has been successfully cancelled");
-    }
-
     private void log(String msg) {
         log.add(0, msg); /* always add to beginning */
         if(log.size() > maxLogs){
@@ -175,12 +172,6 @@ public class NextWindow {
         }
 
         stateDisplay.setText(msg);
-    }
-
-
-    public void triggerCallDisplay() {
-        callInProgress = !callInProgress;
-        updateCallDisplay();
     }
 
     public void setCallDisplay(boolean vis) {

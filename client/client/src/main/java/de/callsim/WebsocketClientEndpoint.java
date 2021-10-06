@@ -61,6 +61,7 @@ public class WebsocketClientEndpoint {
         JsonObject jsonMessage = reader.readObject();
         String action = jsonMessage.getString("Action");
         String value;
+        String bbbserver;
 
         switch (action) {
             case "PosLoginResponse":
@@ -107,17 +108,25 @@ public class WebsocketClientEndpoint {
                 break;
 
             case "incomingCall":
-                String bbbserver = jsonMessage.getString("Value");
+                bbbserver = jsonMessage.getString("Value");
                 String username = jsonMessage.getString("Username");
-                client.incomingCall("Call Incoming from " + username + "...", username, bbbserver);
+                client.bbbserver = bbbserver;
+                client.incomingCall("Call Incoming from " + username + "...", username);
                 break;
 
             case "startedCall":
                 System.out.println(jsonMessage.getString("Value"));
+                System.out.println("Test Start Call");
+                bbbserver = jsonMessage.getString("Value");
+                client.bbbserver = bbbserver;
                 break;
 
             case "RemoteCallEnded":
                 System.out.println(jsonMessage.getString("Value"));
+                if(client.dialog != null){
+                    client.dialog.dispose();
+                    client.dialog = null;
+                }
                 break;
 
             case "SelfCallEnded":
@@ -125,15 +134,13 @@ public class WebsocketClientEndpoint {
                 break;
 
             case "SelfCallAccepted":
-                System.out.println(jsonMessage.getString("Value"));
                 System.out.println("SelfCallAccepted");
-                openURL("https://www.google.com");
+                openURL(jsonMessage.getString("Value"));
                 break;
 
             case "RemoteCallAccepted":
-                System.out.println(jsonMessage.getString("Value"));
                 System.out.println("RemoteCallAccepted");
-                openURL("https://www.google.com");
+                openURL(jsonMessage.getString("Value"));
                 break;
 
             case "SelfCallDeclined":
@@ -153,7 +160,7 @@ public class WebsocketClientEndpoint {
         this.userSession.getAsyncRemote().sendObject(json);
     }
 
-    private void openURL(String bbburl){
+    public void openURL(String bbburl){
         Desktop desktop = java.awt.Desktop.getDesktop();
         try {
             //specify the protocol along with the URL

@@ -1,6 +1,8 @@
 package de.callsim;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
@@ -14,7 +16,9 @@ public class client {
     public static WebsocketClientEndpoint clientEndPoint;
     public static Login loginPage;
     public static NextWindow nwPage;
+    public static JDialog dialog;
     public static String username;
+    public static String bbbserver;
 
     public static void main(String[] args) {
         if(ConnectionInit()) showLoginPage();
@@ -37,9 +41,10 @@ public class client {
         JOptionPane.showMessageDialog(null, msg);
     }
 
-    public static void incomingCall(String msg, String username, String bbbserver){
+    public static void incomingCall(String msg, String username){
+        dialog = generateDialog(msg);
+        /*
         int input = JOptionPane.showOptionDialog(null, msg, "Call", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, null);
-
         if(input == JOptionPane.OK_OPTION)
         {
             System.out.println("Hello World");
@@ -49,12 +54,48 @@ public class client {
                     .add("Username", username)
                     .add("BBBServer", bbbserver)
                     .build();
-            // send LOGIN message to websocket
+            // send respondCall message to websocket
             client.clientEndPoint.sendMessage(value);
         }
         else if (input == JOptionPane.CANCEL_OPTION){
 
         }
+        */
+    }
+
+    public static JDialog generateDialog (String msg){
+        JDialog dialogPane = new JDialog();
+        JPanel panel = new JPanel();
+        JLabel label = new JLabel(username +"\n" + msg);
+        JButton accept = new JButton("accept");
+        JButton decline = new JButton("decline");
+
+        accept.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Hello World");
+                JsonObject value = Json.createObjectBuilder()
+                        .add("action", "respondCall")
+                        .add("Response", "accept")
+                        .add("Username", username)
+                        .add("BBBServer", bbbserver)
+                        .build();
+                // send respondCall message to websocket
+                client.clientEndPoint.sendMessage(value);
+                dialog.dispose();
+                dialog = null;
+            }
+        });
+
+        panel.add(label);
+        panel.add(accept);
+        panel.add(decline);
+
+        dialogPane.add(panel);
+        dialogPane.setSize(200, 200);
+        dialogPane.setAutoRequestFocus(true);
+        dialogPane.setVisible(true);
+        return dialogPane;
     }
 
     public static void showLoginPage(){
@@ -70,7 +111,7 @@ public class client {
 
     public static void showAppPage(){
         if(frame == null) frame = new JFrame("CallSim"); /* just to make sure */
-        frame.setTitle("CallSim App");
+        frame.setTitle("CallSim App - " + username);
         frame.setContentPane(nwPage.rootPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setMinimumSize(new Dimension(400, 450)); // ref: https://stackoverflow.com/a/2782041
