@@ -57,7 +57,7 @@ public class NextWindow {
 
     public NextWindow() {
         log = new ArrayList<String>();
-        log(client.username + " logged in");
+        log(client.clientUsername + " logged in");
         callContainer.setVisible(false);
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(
@@ -66,7 +66,7 @@ public class NextWindow {
                     public void run(){
                         if(!callInProgress) sentListRequest();
                     }
-                }, 0, 10000
+                }, 0, 5000
         );
 
         call.addActionListener(new ActionListener() {
@@ -105,7 +105,7 @@ public class NextWindow {
                 public void actionPerformed(ActionEvent e) {
                     selectedUser = key;
                     updateCallDisplay();
-                    updateBigDisplay(userData, key);
+                    updateBigDisplay(userData, selectedUser);
                 }
             });
             listPanel.add(item);
@@ -114,19 +114,23 @@ public class NextWindow {
         listPanel.add(numberOfUsers);
         numberOfUsers.setText(userData.size() + " user" + (userData.size() != 1 ? "s" : "") + " registered");
         listPanel.revalidate();
+        if (selectedUser != null) updateBigDisplay(userData, selectedUser);
         updateCallDisplay();
     }
 
     public void startACall(String targetUser) {
         log("Starting new call...");
-        setCallDisplay(true);
-        JsonObject json = Json.createObjectBuilder()
-                .add("action", "startCall")
-                .add("Username", targetUser)
-                .build();
-        // send UserStatuses message to websocket
-        client.clientEndPoint.sendMessage(json);
-        /* request logic here */
+        sentListRequest();
+        System.out.println(userData.get(targetUser));
+        if (!userData.get(targetUser).equals("\"inCall\"") && !userData.get(targetUser).equals("\"Offline\"")){
+            JsonObject json = Json.createObjectBuilder()
+                    .add("action", "startCall")
+                    .add("Username", targetUser)
+                    .build();
+            // send UserStatuses message to websocket
+            client.clientEndPoint.sendMessage(json);
+            setCallDisplay(true);
+        }
     }
 
     public void cancelCall() {

@@ -66,7 +66,7 @@ public class WebsocketClientEndpoint {
         switch (action) {
             case "PosLoginResponse":
                 System.out.println(jsonMessage.getString("Value"));
-                client.username = jsonMessage.getString("Value");
+                client.clientUsername = jsonMessage.getString("Value");
                 client.nwPage = new NextWindow();
                 client.showAppPage();
                 break;
@@ -92,7 +92,7 @@ public class WebsocketClientEndpoint {
                 List<JsonObject> list = new ArrayList<>();
                 HashMap<String, String> userData = new HashMap();
                 for(int i = 0; i < user.size(); i++){
-                    if(!user.getJsonObject(i).containsKey(client.username)) list.add(user.getJsonObject(i));
+                    if(!user.getJsonObject(i).containsKey(client.clientUsername)) list.add(user.getJsonObject(i));
                 }
 
                 list.forEach(object -> {
@@ -123,6 +123,7 @@ public class WebsocketClientEndpoint {
 
             case "RemoteCallEnded":
                 System.out.println(jsonMessage.getString("Value"));
+                client.nwPage.setCallDisplay(false);
                 if(client.dialog != null){
                     client.dialog.dispose();
                     client.dialog = null;
@@ -131,6 +132,7 @@ public class WebsocketClientEndpoint {
 
             case "SelfCallEnded":
                 System.out.println(jsonMessage.getString("Value"));
+                client.nwPage.setCallDisplay(false);
                 break;
 
             case "SelfCallAccepted":

@@ -17,7 +17,7 @@ public class client {
     public static Login loginPage;
     public static NextWindow nwPage;
     public static JDialog dialog;
-    public static String username;
+    public static String clientUsername;
     public static String bbbserver;
 
     public static void main(String[] args) {
@@ -42,7 +42,7 @@ public class client {
     }
 
     public static void incomingCall(String msg, String username){
-        dialog = generateDialog(msg);
+        dialog = generateDialog(msg, username);
         /*
         int input = JOptionPane.showOptionDialog(null, msg, "Call", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, null);
         if(input == JOptionPane.OK_OPTION)
@@ -63,10 +63,10 @@ public class client {
         */
     }
 
-    public static JDialog generateDialog (String msg){
+    public static JDialog generateDialog (String msg, String username){
         JDialog dialogPane = new JDialog();
         JPanel panel = new JPanel();
-        JLabel label = new JLabel(username +"\n" + msg);
+        JLabel label = new JLabel(clientUsername +"\n" + msg);
         JButton accept = new JButton("accept");
         JButton decline = new JButton("decline");
 
@@ -77,6 +77,22 @@ public class client {
                 JsonObject value = Json.createObjectBuilder()
                         .add("action", "respondCall")
                         .add("Response", "accept")
+                        .add("Username", username)
+                        .add("BBBServer", bbbserver)
+                        .build();
+                // send respondCall message to websocket
+                client.clientEndPoint.sendMessage(value);
+                dialog.dispose();
+                dialog = null;
+            }
+        });
+
+        decline.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Hello World");
+                JsonObject value = Json.createObjectBuilder()
+                        .add("action", "endCall")
                         .add("Username", username)
                         .add("BBBServer", bbbserver)
                         .build();
@@ -111,7 +127,7 @@ public class client {
 
     public static void showAppPage(){
         if(frame == null) frame = new JFrame("CallSim"); /* just to make sure */
-        frame.setTitle("CallSim App - " + username);
+        frame.setTitle("CallSim App - " + clientUsername);
         frame.setContentPane(nwPage.rootPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setMinimumSize(new Dimension(400, 450)); // ref: https://stackoverflow.com/a/2782041
