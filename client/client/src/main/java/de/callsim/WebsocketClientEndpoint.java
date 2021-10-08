@@ -103,11 +103,9 @@ public class WebsocketClientEndpoint {
                 });
                 client.nwPage.getListResponse(userData);
                 break;
-            case "NotFound":
-                System.out.println(jsonMessage.getString("Value"));
-                break;
 
             case "incomingCall":
+                client.nwPage.log("New call incoming...");
                 bbbserver = jsonMessage.getString("Value");
                 String username = jsonMessage.getString("Username");
                 client.bbbserver = bbbserver;
@@ -115,6 +113,8 @@ public class WebsocketClientEndpoint {
                 break;
 
             case "startedCall":
+                client.nwPage.setCallDisplay(true);
+                client.nwPage.log("Starting new call...");
                 System.out.println(jsonMessage.getString("Value"));
                 System.out.println("Test Start Call");
                 bbbserver = jsonMessage.getString("Value");
@@ -128,30 +128,47 @@ public class WebsocketClientEndpoint {
                     client.dialog.dispose();
                     client.dialog = null;
                 }
+                client.nwPage.log("User ended the call...");
                 break;
 
             case "SelfCallEnded":
                 System.out.println(jsonMessage.getString("Value"));
                 client.nwPage.setCallDisplay(false);
+                client.nwPage.log("You ended the call...");
                 break;
 
             case "SelfCallAccepted":
                 System.out.println("SelfCallAccepted");
                 openURL(jsonMessage.getString("Value"));
+                client.nwPage.log("You accepted the call...");
                 break;
 
             case "RemoteCallAccepted":
                 System.out.println("RemoteCallAccepted");
                 openURL(jsonMessage.getString("Value"));
+                client.nwPage.log("Call got accepted...");
                 break;
 
             case "SelfCallDeclined":
                 System.out.println(jsonMessage.getString("Value"));
+                client.nwPage.log("You canceled the call...");
                 break;
 
             case "RemoteCallDeclined":
                 System.out.println(jsonMessage.getString("Value"));
+                client.nwPage.log("User declined your call...");
                 break;
+            case "inCall":
+                System.out.println(jsonMessage.getString("Value"));
+                client.nwPage.log("User is in a call...");
+                client.popupMessage(jsonMessage.getString("Value"));
+                break;
+            case "Offline":
+                System.out.println(jsonMessage.getString("Value"));
+                client.nwPage.log("User is offline");
+                client.popupMessage(jsonMessage.getString("Value"));
+                break;
+
 
             default:
                 System.out.println("Keine gültige Rückmeldung");

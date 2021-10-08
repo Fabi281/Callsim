@@ -119,18 +119,15 @@ public class NextWindow {
     }
 
     public void startACall(String targetUser) {
-        log("Starting new call...");
         sentListRequest();
         System.out.println(userData.get(targetUser));
-        if (!userData.get(targetUser).equals("\"inCall\"") && !userData.get(targetUser).equals("\"Offline\"")){
-            JsonObject json = Json.createObjectBuilder()
-                    .add("action", "startCall")
-                    .add("Username", targetUser)
-                    .build();
-            // send UserStatuses message to websocket
-            client.clientEndPoint.sendMessage(json);
-            setCallDisplay(true);
-        }
+        JsonObject json = Json.createObjectBuilder()
+                .add("action", "startCall")
+                .add("Username", targetUser)
+                .build();
+        // send UserStatuses message to websocket
+        client.clientEndPoint.sendMessage(json);
+
     }
 
     public void cancelCall() {
@@ -169,7 +166,7 @@ public class NextWindow {
         userStatebar2.setToolTipText(stateTooltip);
     }
 
-    private void log(String msg) {
+    public void log(String msg) {
         log.add(0, msg); /* always add to beginning */
         if(log.size() > maxLogs){
             /* here you could reduce the list so it doensn't mess up the storage */

@@ -77,18 +77,18 @@ public class SessionHandler {
 
     public static void startCall(Session initialSession, String userToCall) throws IOException{
 
-        if(sessions.get(initialSession).get(1).equals("inCall") || sessions.get(activeUser.get(userToCall)).get(1).equals("inCall")){
+        if(!activeUser.containsKey(userToCall)){
 
-            LOGGER.info(sessions.get(initialSession).get(0) + " tried to call " + userToCall + " but someone is already in a call");
-            initialSession.getBasicRemote().sendText(Utils.buildResponse("Busy", "You or the other Person ist already in a Call"));  
+            LOGGER.info(sessions.get(initialSession).get(0) + " tried to call " + userToCall + " but he/she is offline");
+            initialSession.getBasicRemote().sendText(Utils.buildResponse("Offline", userToCall + " is Offline"));
             return;
 
         }
- 
-        if(sessions.get(activeUser.get(userToCall)).get(1).equals("Offline")){
 
-            LOGGER.info(sessions.get(initialSession).get(0) + " tried to call " + userToCall + "but he/she is offline");
-            initialSession.getBasicRemote().sendText(Utils.buildResponse("Offline", userToCall + " is Offline"));  
+        if(sessions.get(initialSession).get(1).equals("inCall") || sessions.get(activeUser.get(userToCall)).get(1).equals("inCall")){
+
+            LOGGER.info(sessions.get(initialSession).get(0) + " tried to call " + userToCall + " but someone is already in a call");
+            initialSession.getBasicRemote().sendText(Utils.buildResponse("inCall", "You or the other Person ist already in a Call"));
             return;
 
         }

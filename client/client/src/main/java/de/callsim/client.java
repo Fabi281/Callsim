@@ -65,10 +65,11 @@ public class client {
 
     public static JDialog generateDialog (String msg, String username){
         JDialog dialogPane = new JDialog();
-        JPanel panel = new JPanel();
-        JLabel label = new JLabel(clientUsername +"\n" + msg);
-        JButton accept = new JButton("accept");
-        JButton decline = new JButton("decline");
+        IncomingCall icPage = new IncomingCall();
+        JLabel label = icPage.nameLabel;
+        label.setText(username);
+        JButton accept = icPage.acceptBtn;
+        JButton decline = icPage.declineBtn;
 
         accept.addActionListener(new ActionListener() {
             @Override
@@ -80,7 +81,6 @@ public class client {
                         .add("Username", username)
                         .add("BBBServer", bbbserver)
                         .build();
-                // send respondCall message to websocket
                 client.clientEndPoint.sendMessage(value);
                 dialog.dispose();
                 dialog = null;
@@ -102,13 +102,10 @@ public class client {
                 dialog = null;
             }
         });
-
-        panel.add(label);
-        panel.add(accept);
-        panel.add(decline);
-
-        dialogPane.add(panel);
-        dialogPane.setSize(200, 200);
+        dialogPane.add(icPage.rootPanel);
+        dialogPane.setTitle("Incoming Call...");
+        dialogPane.setSize(200, 220);
+        dialogPane.setLocationRelativeTo(nwPage.rootPanel);
         dialogPane.setAutoRequestFocus(true);
         dialogPane.setVisible(true);
         return dialogPane;
