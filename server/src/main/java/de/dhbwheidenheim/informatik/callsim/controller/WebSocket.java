@@ -47,7 +47,7 @@ public class WebSocket {
                 if (exists && SessionHandler.checkLogin(jsonMessage.getString("Username"))) {
                     session.getBasicRemote()
                             .sendText(Utils.buildResponse("PosLoginResponse", jsonMessage.getString("Username")));
-                    SessionHandler.addSession(session, jsonMessage.getString("Username"));
+                            SessionHandler.addSession(session, jsonMessage.getString("Username"));
                 } else {
                     String msg;
                     if (!exists)
