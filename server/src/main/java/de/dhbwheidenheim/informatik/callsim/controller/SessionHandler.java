@@ -164,9 +164,14 @@ public class SessionHandler {
             endCall(initialSession, user, usedServer);
 
         }else{
+            //// Set all users to Online and the server available as the call now ended and called/used again
+            BBBServer.put(usedServer, "available");
+            sessions.get(initialSession).set(1, "Online");
+            sessions.get(activeUser.get(user)).set(1, "Online");
+
             // The action if the call got declined by the person being called
             initialSession.getBasicRemote().sendText(Utils.buildResponse("SelfCallDeclined", "The call got declined")); 
-            activeUser.get(user).getBasicRemote().sendText(Utils.buildResponse("RemoteCallDeclined", "The call got accepted"));
+            activeUser.get(user).getBasicRemote().sendText(Utils.buildResponse("RemoteCallDeclined", "The call got declined"));
             LOGGER.info(sessions.get(initialSession).get(0) + " declined the call from " + user);
             
         }
