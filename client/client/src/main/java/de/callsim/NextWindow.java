@@ -44,6 +44,7 @@ public class NextWindow {
     final int maxLogs = 10;
     private String selectedUser = null;
     boolean callInProgress = false;
+    boolean callAccepted = false;
 
     HashMap<String, String> userData = new HashMap<>();
     HashMap<String, String> stateColors = new HashMap<String, String>() {{
@@ -64,23 +65,15 @@ public class NextWindow {
                 new TimerTask(){
                     @Override
                     public void run(){
-                        if(!callInProgress) sentListRequest();
+                        sentListRequest();
                     }
                 }, 0, 5000
         );
 
-        call.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                startACall(selectedUser);
-            }
+        call.addActionListener(e -> {
+            if(!callInProgress) startACall(selectedUser);
         });
-        hangUpBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                cancelCall();
-            }
-        });
+        hangUpBtn.addActionListener(e -> cancelCall());
     }
 
     public void sentListRequest(){
@@ -93,34 +86,30 @@ public class NextWindow {
 
     public void getListResponse(HashMap<String, String> userData){
         this.userData = userData;
-        System.out.println(userData);
         for(Component comp : listPanel.getComponents()){
             listPanel.remove(comp);
         }
         listPanel.setLayout(new GridLayout(0, 1));
         for (String key : userData.keySet()){
             UserItem item = new UserItem(key);
-            item.getUserBtn().addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    selectedUser = key;
-                    updateCallDisplay();
-                    updateBigDisplay(userData, selectedUser);
-                }
+            item.getUserBtn().addActionListener(e -> {
+                selectedUser = key;
+                updateCallDisplay();
+                updateBigDisplay(selectedUser);
             });
             listPanel.add(item);
 
         }
         listPanel.add(numberOfUsers);
         numberOfUsers.setText(userData.size() + " user" + (userData.size() != 1 ? "s" : "") + " registered");
-        listPanel.revalidate();
-        if (selectedUser != null) updateBigDisplay(userData, selectedUser);
+        if (selectedUser != null) updateBigDisplay(selectedUser);
         updateCallDisplay();
+        listPanel.revalidate();
     }
 
     public void startACall(String targetUser) {
         sentListRequest();
-        System.out.println(userData.get(targetUser));
+        client.callPartnerUsername = targetUser;
         JsonObject json = Json.createObjectBuilder()
                 .add("action", "startCall")
                 .add("Username", targetUser)
@@ -145,10 +134,9 @@ public class NextWindow {
         log("Call has been successfully cancelled");
     }
 
-    public void updateBigDisplay(HashMap<String, String> userData, String newUsername) {
+    public void updateBigDisplay(String newUsername) {
         if (callInProgress) return; /* if a call is in progress, abort */
         if (userData == null) return;
-        System.out.println(userData.get(newUsername));
         String nameOfUser = newUsername;
         String stateOfUser = stateColors.get(userData.get(newUsername));
 
@@ -157,9 +145,7 @@ public class NextWindow {
                 colorG = Integer.parseInt(color.split(",")[1]),
                 colorB = Integer.parseInt(color.split(",")[2]);
 
-
         String stateTooltip = stateOfUser.split(";")[1];
-
 
         firstNameLabelBig.setText(nameOfUser);
         userStatebar2.setForeground(new Color(colorR, colorG, colorB));
@@ -180,8 +166,9 @@ public class NextWindow {
         updateCallDisplay();
     }
 
-    private void updateCallDisplay() {
+    public void updateCallDisplay() {
         callContainer.setVisible(!callInProgress && selectedUser != null);
+        hangUpBtn.setVisible(!callAccepted);
         callProgressPanel.setVisible(callInProgress);
 
         listPanel.setEnabled(!callInProgress); /* when call in progress, disable the sidebar */

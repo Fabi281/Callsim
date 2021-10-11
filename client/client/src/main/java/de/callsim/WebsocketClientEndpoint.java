@@ -4,14 +4,13 @@ import java.awt.*;
 import java.io.StringReader;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 import java.awt.Desktop;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 
 import javax.json.Json;
 import javax.json.JsonArray;
@@ -65,39 +64,54 @@ public class WebsocketClientEndpoint {
 
         switch (action) {
             case "PosLoginResponse":
-                System.out.println(jsonMessage.getString("Value"));
+                //Debugging
+                System.out.println("case: PosLoginResponse");
+
                 client.clientUsername = jsonMessage.getString("Value");
                 client.nwPage = new NextWindow();
                 client.showAppPage();
                 break;
 
             case "NegLoginResponse":
-                System.out.println(jsonMessage.getString("Value"));
+                //Debugging
+                System.out.println("case: NegLoginResponse");
+
+                client.popupMessage(jsonMessage.getString("Value"));
                 break;
 
             case "PosRegisterResponse":
+                //Debugging
+                System.out.println("case: PosRegisterResponse");
+
                 value = jsonMessage.getString("Value");
-                System.out.println(value);
                 client.popupMessage(value);
                 break;
 
             case "NegRegisterResponse":
+                //Debugging
+                System.out.println("case: NegRegisterResponse");
+
                 value = jsonMessage.getString("Value");
-                System.out.println(value);
                 client.popupMessage(value);
                 break;
 
             case "StatusResponse":
+                //Debugging
+                System.out.println("case: statusResponse");
                 JsonArray user = jsonMessage.getJsonArray("User");
-                List<JsonObject> list = new ArrayList<>();
-                HashMap<String, String> userData = new HashMap();
+                ArrayList<JsonObject> list = new ArrayList<>();
+                //HashMap does not guarantee iteration-order, while LinkedHashmap does
+                LinkedHashMap<String, String> userData = new LinkedHashMap();
                 for(int i = 0; i < user.size(); i++){
                     if(!user.getJsonObject(i).containsKey(client.clientUsername)) list.add(user.getJsonObject(i));
                 }
-
+                list.sort((o1, o2) -> {
+                    String one = o1.keySet().toString().toUpperCase();
+                    String two = o2.keySet().toString().toUpperCase();
+                    return one.compareTo(two);
+                });
                 list.forEach(object -> {
                     for (String key: object.keySet()){
-                        System.out.println(key + ": " + object.get(key));
                         userData.put(key, object.get(key).toString());
                     }
                 });
@@ -105,6 +119,9 @@ public class WebsocketClientEndpoint {
                 break;
 
             case "incomingCall":
+                //Debugging
+                System.out.println("case: incomingCall");
+
                 client.nwPage.log("New call incoming...");
                 bbbserver = jsonMessage.getString("Value");
                 String username = jsonMessage.getString("Username");
@@ -113,64 +130,97 @@ public class WebsocketClientEndpoint {
                 break;
 
             case "startedCall":
+                //Debugging
+                System.out.println("case: startedCall");
+
                 client.nwPage.setCallDisplay(true);
                 client.nwPage.log("Starting new call...");
                 System.out.println(jsonMessage.getString("Value"));
-                System.out.println("Test Start Call");
                 bbbserver = jsonMessage.getString("Value");
                 client.bbbserver = bbbserver;
                 break;
 
             case "RemoteCallEnded":
-                System.out.println(jsonMessage.getString("Value"));
-                client.nwPage.setCallDisplay(false);
+                //Debugging
+                System.out.println("case: RemoteCallEnded");
                 if(client.dialog != null){
                     client.dialog.dispose();
                     client.dialog = null;
                 }
+                client.nwPage.callAccepted = false;
+                client.nwPage.setCallDisplay(false);
                 client.nwPage.log("User ended the call...");
                 break;
 
             case "SelfCallEnded":
-                System.out.println(jsonMessage.getString("Value"));
+                //Debugging
+                System.out.println("case: selfCallEnded");
+
+                client.nwPage.callAccepted = false;
                 client.nwPage.setCallDisplay(false);
                 client.nwPage.log("You ended the call...");
                 break;
 
             case "SelfCallAccepted":
-                System.out.println("SelfCallAccepted");
+                //Debugging
+                System.out.println("case: selfCallAccepted");
+
                 openURL(jsonMessage.getString("Value"));
                 client.nwPage.log("You accepted the call...");
+                client.nwPage.callAccepted = true;
+                client.nwPage.updateCallDisplay();
+                client.ongoingCall();
                 break;
 
             case "RemoteCallAccepted":
-                System.out.println("RemoteCallAccepted");
+                //Debugging
+                System.out.println("case: remoteCallAccepted");
                 openURL(jsonMessage.getString("Value"));
                 client.nwPage.log("Call got accepted...");
+                client.nwPage.callAccepted = true;
+                client.nwPage.updateCallDisplay();
+                client.ongoingCall();
                 break;
 
             case "SelfCallDeclined":
-                System.out.println(jsonMessage.getString("Value"));
-                client.nwPage.log("You canceled the call...");
+                //Debugging
+                System.out.println("case: selfCallDeclined");
+                client.nwPage.log("You declined the call...");
+                client.nwPage.callAccepted = false;
+                client.nwPage.setCallDisplay(false);
                 break;
 
             case "RemoteCallDeclined":
-                System.out.println(jsonMessage.getString("Value"));
+                //Debugging
+                System.out.println("case: remoteCallDeclined");
+
+                if(client.dialog != null){
+                    client.dialog.dispose();
+                    client.dialog = null;
+                }
+                client.nwPage.callAccepted = false;
+                client.nwPage.setCallDisplay(false);
                 client.nwPage.log("User declined your call...");
                 break;
             case "inCall":
-                System.out.println(jsonMessage.getString("Value"));
+                //Debugging
+                System.out.println("case: inCall");
+
                 client.nwPage.log("User is in a call...");
                 client.popupMessage(jsonMessage.getString("Value"));
                 break;
             case "Offline":
-                System.out.println(jsonMessage.getString("Value"));
+                //Debugging
+                System.out.println("case: offline");
+
                 client.nwPage.log("User is offline");
                 client.popupMessage(jsonMessage.getString("Value"));
                 break;
 
 
             default:
+                //Debugging
+                System.out.println("case: default");
                 System.out.println("Keine gültige Rückmeldung");
         }
     }

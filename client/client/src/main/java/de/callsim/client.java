@@ -3,9 +3,10 @@ package de.callsim;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.HashMap;
 
 import javax.json.Json;
 import javax.json.JsonObject;
@@ -18,6 +19,7 @@ public class client {
     public static NextWindow nwPage;
     public static JDialog dialog;
     public static String clientUsername;
+    public static String callPartnerUsername = null;
     public static String bbbserver;
 
     public static void main(String[] args) {
@@ -42,39 +44,17 @@ public class client {
     }
 
     public static void incomingCall(String msg, String username){
-        dialog = generateDialog(msg, username);
-        /*
-        int input = JOptionPane.showOptionDialog(null, msg, "Call", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, null);
-        if(input == JOptionPane.OK_OPTION)
-        {
-            System.out.println("Hello World");
-            JsonObject value = Json.createObjectBuilder()
-                    .add("action", "respondCall")
-                    .add("Response", "accept")
-                    .add("Username", username)
-                    .add("BBBServer", bbbserver)
-                    .build();
-            // send respondCall message to websocket
-            client.clientEndPoint.sendMessage(value);
-        }
-        else if (input == JOptionPane.CANCEL_OPTION){
-
-        }
-        */
-    }
-
-    public static JDialog generateDialog (String msg, String username){
         JDialog dialogPane = new JDialog();
         IncomingCall icPage = new IncomingCall();
-        JLabel label = icPage.nameLabel;
-        label.setText(username);
-        JButton accept = icPage.acceptBtn;
-        JButton decline = icPage.declineBtn;
-
-        accept.addActionListener(new ActionListener() {
+        dialogPane.add(icPage.rootPanel);
+        dialogPane.setTitle("Incoming Call...");
+        icPage.nameLabel.setText(username);
+        icPage.acceptBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Hello World");
+                callPartnerUsername = username;
+                dialog.dispose();
+                dialog = null;
                 JsonObject value = Json.createObjectBuilder()
                         .add("action", "respondCall")
                         .add("Response", "accept")
@@ -82,33 +62,97 @@ public class client {
                         .add("BBBServer", bbbserver)
                         .build();
                 client.clientEndPoint.sendMessage(value);
-                dialog.dispose();
-                dialog = null;
+                nwPage.updateBigDisplay(username);
+                nwPage.setCallDisplay(true);
             }
         });
 
-        decline.addActionListener(new ActionListener() {
+        icPage.declineBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Hello World");
+                nwPage.callInProgress = false;
+                dialog.dispose();
+                dialog = null;
                 JsonObject value = Json.createObjectBuilder()
-                        .add("action", "endCall")
+                        .add("action", "respondCall")
+                        .add("Response", "decline")
                         .add("Username", username)
                         .add("BBBServer", bbbserver)
                         .build();
                 // send respondCall message to websocket
                 client.clientEndPoint.sendMessage(value);
-                dialog.dispose();
-                dialog = null;
+                callPartnerUsername = null;
             }
         });
-        dialogPane.add(icPage.rootPanel);
-        dialogPane.setTitle("Incoming Call...");
         dialogPane.setSize(200, 220);
         dialogPane.setLocationRelativeTo(nwPage.rootPanel);
         dialogPane.setAutoRequestFocus(true);
         dialogPane.setVisible(true);
-        return dialogPane;
+        dialogPane.setAlwaysOnTop(true);
+        dialogPane.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                nwPage.callInProgress = false;
+                dialog.dispose();
+                dialog = null;
+                JsonObject value = Json.createObjectBuilder()
+                        .add("action", "respondCall")
+                        .add("Response", "decline")
+                        .add("Username", username)
+                        .add("BBBServer", bbbserver)
+                        .build();
+                // send respondCall message to websocket
+                client.clientEndPoint.sendMessage(value);
+                callPartnerUsername = null;
+            }
+        });
+        dialog = dialogPane;
+
+    }
+
+    public static void ongoingCall (){
+        JDialog dialogPane = new JDialog();
+        RunningCall rcPage = new RunningCall();
+        dialogPane.add(rcPage.rootPanel);
+        dialogPane.setTitle("Call...");
+
+        rcPage.endcallBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dialog.dispose();
+                dialog = null;
+                JsonObject value = Json.createObjectBuilder()
+                        .add("action", "endCall")
+                        .add("Username", callPartnerUsername)
+                        .add("BBBServer", bbbserver)
+                        .build();
+                // send respondCall message to websocket
+                client.clientEndPoint.sendMessage(value);
+                callPartnerUsername = null;
+            }
+        });
+
+        dialogPane.setSize(300, 220);
+        dialogPane.setLocationRelativeTo(nwPage.rootPanel);
+        dialogPane.setAutoRequestFocus(true);
+        dialogPane.setVisible(true);
+        dialogPane.setAlwaysOnTop(true);
+        dialogPane.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                dialog.dispose();
+                dialog = null;
+                JsonObject value = Json.createObjectBuilder()
+                        .add("action", "endCall")
+                        .add("Username", callPartnerUsername)
+                        .add("BBBServer", bbbserver)
+                        .build();
+                // send respondCall message to websocket
+                client.clientEndPoint.sendMessage(value);
+                callPartnerUsername = null;
+            }
+        });
+        dialog = dialogPane;
     }
 
     public static void showLoginPage(){

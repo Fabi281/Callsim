@@ -3,8 +3,8 @@ package de.callsim;
 import javax.swing.*;
 
 public class RunningCall {
-    JPanel rootPanel;
-    JButton openBigBlueButtonButton;
-    JLabel otherUserLabel;
-    JLabel durationLabel;
+    public JPanel rootPanel;
+    public JButton endcallBtn;
+    public JLabel otherUserLabel;
+    private JLabel durationLabel;
 }

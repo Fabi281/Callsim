@@ -1,0 +1,290 @@
+Okt. 11, 2021 9:23:36 AM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Fabi started a call with Marc
+Okt. 11, 2021 9:23:45 AM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler endCall
+INFO: The call between Marc and Fabi ended and the Server is available again
+Okt. 11, 2021 9:23:48 AM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Fabi started a call with Marc
+Okt. 11, 2021 9:23:51 AM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler endCall
+INFO: The call between Fabi and Marc ended and the Server is available again
+Okt. 11, 2021 9:23:57 AM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Fabi started a call with Marc
+Okt. 11, 2021 9:23:59 AM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler endCall
+INFO: The call between Marc and Fabi ended and the Server is available again
+Okt. 11, 2021 9:24:09 AM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Fabi tried to call Ferdinand but he/she is offline
+Okt. 11, 2021 9:24:12 AM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Fabi tried to call Ferdinand but he/she is offline
+Okt. 11, 2021 10:16:28 AM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Marc tried to call Fabi but he/she is offline
+Okt. 11, 2021 1:48:21 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Marc started a call with Fabi
+Okt. 11, 2021 1:48:23 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler endCall
+INFO: The call between Fabi and Marc ended and the Server is available again
+Okt. 11, 2021 1:48:28 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Marc started a call with Fabi
+Okt. 11, 2021 1:48:29 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler respondToCall
+INFO: Fabi accepted the call from Marc
+Okt. 11, 2021 1:48:39 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler endCall
+INFO: The call between Marc and Fabi ended and the Server is available again
+Okt. 11, 2021 1:57:35 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Marc started a call with Fabi
+Okt. 11, 2021 1:57:37 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler endCall
+INFO: The call between Fabi and Marc ended and the Server is available again
+Okt. 11, 2021 2:11:41 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Marc started a call with Fabi
+Okt. 11, 2021 2:11:44 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler respondToCall
+INFO: Fabi accepted the call from Marc
+Okt. 11, 2021 2:12:02 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler endCall
+INFO: The call between Marc and Fabi ended and the Server is available again
+Okt. 11, 2021 2:14:34 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Marc started a call with Fabi
+Okt. 11, 2021 2:14:37 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler respondToCall
+INFO: Fabi accepted the call from Marc
+Okt. 11, 2021 2:20:50 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Marc started a call with Fabi
+Okt. 11, 2021 2:20:52 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler respondToCall
+INFO: Fabi accepted the call from Marc
+Okt. 11, 2021 2:21:38 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler endCall
+INFO: The call between Marc and Fabi ended and the Server is available again
+Okt. 11, 2021 2:21:47 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Marc started a call with Fabi
+Okt. 11, 2021 2:21:48 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler endCall
+INFO: The call between Fabi and Marc ended and the Server is available again
+Okt. 11, 2021 2:22:37 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Marc started a call with Fabi
+Okt. 11, 2021 2:22:38 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler respondToCall
+INFO: Fabi accepted the call from Marc
+Okt. 11, 2021 2:22:44 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler endCall
+INFO: The call between Marc and Fabi ended and the Server is available again
+Okt. 11, 2021 2:22:46 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Marc started a call with Fabi
+Okt. 11, 2021 2:22:47 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler respondToCall
+INFO: Fabi accepted the call from Marc
+Okt. 11, 2021 2:22:53 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler endCall
+INFO: The call between Marc and Fabi ended and the Server is available again
+Okt. 11, 2021 2:22:55 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Marc started a call with Fabi
+Okt. 11, 2021 2:22:56 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler respondToCall
+INFO: Fabi accepted the call from Marc
+Okt. 11, 2021 2:23:00 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler endCall
+INFO: The call between Marc and Fabi ended and the Server is available again
+Okt. 11, 2021 2:23:02 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Marc started a call with Fabi
+Okt. 11, 2021 2:23:03 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler respondToCall
+INFO: Fabi accepted the call from Marc
+Okt. 11, 2021 2:23:10 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler endCall
+INFO: The call between Marc and Fabi ended and the Server is available again
+Okt. 11, 2021 2:29:11 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Marc started a call with Fabi
+Okt. 11, 2021 2:29:12 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler respondToCall
+INFO: Fabi accepted the call from Marc
+Okt. 11, 2021 2:29:56 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler endCall
+INFO: The call between Marc and Fabi ended and the Server is available again
+Okt. 11, 2021 2:30:00 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Marc tried to call Derek but he/she is offline
+Okt. 11, 2021 2:33:41 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Marc started a call with Fabi
+Okt. 11, 2021 2:33:43 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler respondToCall
+INFO: Fabi accepted the call from Marc
+Okt. 11, 2021 2:34:10 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler endCall
+INFO: The call between Marc and Fabi ended and the Server is available again
+Okt. 11, 2021 2:36:15 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Fabi started a call with Marc
+Okt. 11, 2021 2:36:16 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler respondToCall
+INFO: Marc accepted the call from Fabi
+Okt. 11, 2021 2:36:55 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler endCall
+INFO: The call between Marc and Fabi ended and the Server is available again
+Okt. 11, 2021 2:38:03 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Marc started a call with Fabi
+Okt. 11, 2021 2:38:06 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler respondToCall
+INFO: Fabi accepted the call from Marc
+Okt. 11, 2021 2:38:28 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler endCall
+INFO: The call between Marc and Fabi ended and the Server is available again
+Okt. 11, 2021 3:29:24 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Fabi started a call with Marc
+Okt. 11, 2021 3:29:26 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler respondToCall
+INFO: Marc accepted the call from Fabi
+Okt. 11, 2021 3:30:07 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler endCall
+INFO: The call between Marc and Fabi ended and the Server is available again
+Okt. 11, 2021 3:32:52 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Marc started a call with Fabi
+Okt. 11, 2021 3:33:10 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler endCall
+INFO: The call between Fabi and Marc ended and the Server is available again
+Okt. 11, 2021 3:34:03 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Fabi started a call with Marc
+Okt. 11, 2021 3:34:17 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler endCall
+INFO: The call between Fabi and Marc ended and the Server is available again
+Okt. 11, 2021 3:40:29 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Fabi started a call with Marc
+Okt. 11, 2021 3:40:30 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler respondToCall
+INFO: Marc accepted the call from Fabi
+Okt. 11, 2021 3:42:57 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Fabi started a call with Marc
+Okt. 11, 2021 3:42:58 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler respondToCall
+INFO: Marc accepted the call from Fabi
+Okt. 11, 2021 3:43:16 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler endCall
+INFO: The call between Fabi and Marc ended and the Server is available again
+Okt. 11, 2021 3:48:48 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Marc tried to call Fabian but he/she is offline
+Okt. 11, 2021 3:48:52 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Marc started a call with Fabi
+Okt. 11, 2021 3:48:54 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler endCall
+INFO: The call between Fabi and Marc ended and the Server is available again
+Okt. 11, 2021 3:49:02 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Marc started a call with Fabi
+Okt. 11, 2021 3:49:06 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler endCall
+INFO: The call between Fabi and Marc ended and the Server is available again
+Okt. 11, 2021 3:49:08 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Marc started a call with Fabi
+Okt. 11, 2021 3:49:10 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler endCall
+INFO: The call between Fabi and Marc ended and the Server is available again
+Okt. 11, 2021 3:50:35 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Marc started a call with Fabi
+Okt. 11, 2021 3:50:59 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler endCall
+INFO: The call between Fabi and Marc ended and the Server is available again
+Okt. 11, 2021 3:53:09 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Marc started a call with Fabi
+Okt. 11, 2021 3:53:10 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler respondToCall
+INFO: Fabi declined the call from Marc
+Okt. 11, 2021 3:55:02 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Fabi tried to call Marc but there is no unused server
+Okt. 11, 2021 3:55:05 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Fabi tried to call Marc but there is no unused server
+Okt. 11, 2021 3:55:05 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Fabi tried to call Marc but there is no unused server
+Okt. 11, 2021 3:55:05 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Fabi tried to call Marc but there is no unused server
+Okt. 11, 2021 3:55:05 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Fabi tried to call Marc but there is no unused server
+Okt. 11, 2021 3:55:09 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Fabi tried to call Marc but there is no unused server
+Okt. 11, 2021 3:55:12 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Marc tried to call Fabi but there is no unused server
+Okt. 11, 2021 3:55:15 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Marc tried to call Fabi but there is no unused server
+Okt. 11, 2021 3:55:16 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Marc tried to call Fabi but there is no unused server
+Okt. 11, 2021 3:55:17 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Marc tried to call Fabi but there is no unused server
+Okt. 11, 2021 3:57:43 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Fabi started a call with Marc
+Okt. 11, 2021 3:57:45 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler respondToCall
+INFO: Marc declined the call from Fabi
+Okt. 11, 2021 3:58:12 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Fabi started a call with Marc
+Okt. 11, 2021 3:58:13 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler respondToCall
+INFO: Marc declined the call from Fabi
+Okt. 11, 2021 3:58:14 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Fabi started a call with Marc
+Okt. 11, 2021 3:58:15 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler respondToCall
+INFO: Marc declined the call from Fabi
+Okt. 11, 2021 3:58:16 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Fabi started a call with Marc
+Okt. 11, 2021 3:58:17 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler respondToCall
+INFO: Marc declined the call from Fabi
+Okt. 11, 2021 3:58:18 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Fabi started a call with Marc
+Okt. 11, 2021 3:58:19 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler respondToCall
+INFO: Marc declined the call from Fabi
+Okt. 11, 2021 3:58:20 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Fabi started a call with Marc
+Okt. 11, 2021 3:58:20 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler respondToCall
+INFO: Marc declined the call from Fabi
+Okt. 11, 2021 3:58:21 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Fabi started a call with Marc
+Okt. 11, 2021 3:58:22 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler respondToCall
+INFO: Marc declined the call from Fabi
+Okt. 11, 2021 3:58:24 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Fabi started a call with Marc
+Okt. 11, 2021 3:58:25 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler respondToCall
+INFO: Marc accepted the call from Fabi
+Okt. 11, 2021 3:58:39 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler endCall
+INFO: The call between Marc and Fabi ended and the Server is available again
+Okt. 11, 2021 4:00:42 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Marc started a call with Fabi
+Okt. 11, 2021 4:00:43 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler respondToCall
+INFO: Fabi declined the call from Marc
+Okt. 11, 2021 4:01:06 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Marc started a call with Fabi
+Okt. 11, 2021 4:01:08 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler respondToCall
+INFO: Fabi declined the call from Marc
+Okt. 11, 2021 4:01:17 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Marc started a call with Fabi
+Okt. 11, 2021 4:01:18 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler respondToCall
+INFO: Fabi accepted the call from Marc
+Okt. 11, 2021 4:01:21 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler endCall
+INFO: The call between Marc and Fabi ended and the Server is available again
+Okt. 11, 2021 4:01:29 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Marc started a call with Fabi
+Okt. 11, 2021 4:01:39 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler respondToCall
+INFO: Fabi accepted the call from Marc
+Okt. 11, 2021 4:04:51 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Marc started a call with Fabi
+Okt. 11, 2021 4:04:52 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler respondToCall
+INFO: Fabi accepted the call from Marc
+Okt. 11, 2021 4:04:56 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler endCall
+INFO: The call between Fabi and Marc ended and the Server is available again
+Okt. 11, 2021 4:12:17 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Marc started a call with Fabi
+Okt. 11, 2021 4:12:18 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler respondToCall
+INFO: Fabi accepted the call from Marc
+Okt. 11, 2021 4:12:22 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler endCall
+INFO: The call between Marc and Fabi ended and the Server is available again
+Okt. 11, 2021 4:12:26 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Marc started a call with Fabi
+Okt. 11, 2021 4:12:34 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler respondToCall
+INFO: Fabi accepted the call from Marc
+Okt. 11, 2021 4:12:36 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler endCall
+INFO: The call between Marc and Fabi ended and the Server is available again
+Okt. 11, 2021 4:12:42 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Marc started a call with Fabi
+Okt. 11, 2021 4:12:43 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler respondToCall
+INFO: Fabi accepted the call from Marc
+Okt. 11, 2021 4:12:49 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler endCall
+INFO: The call between Marc and Fabi ended and the Server is available again
+Okt. 11, 2021 4:12:53 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Marc started a call with Fabi
+Okt. 11, 2021 4:12:57 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler respondToCall
+INFO: Fabi declined the call from Marc
+Okt. 11, 2021 4:13:01 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Marc started a call with Fabi
+Okt. 11, 2021 4:13:02 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler respondToCall
+INFO: Fabi accepted the call from Marc
+Okt. 11, 2021 4:13:04 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler endCall
+INFO: The call between Fabi and Marc ended and the Server is available again
+Okt. 11, 2021 4:13:07 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Marc started a call with Fabi
+Okt. 11, 2021 4:13:08 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler respondToCall
+INFO: Fabi accepted the call from Marc
+Okt. 11, 2021 4:13:10 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler endCall
+INFO: The call between Marc and Fabi ended and the Server is available again
+Okt. 11, 2021 4:15:12 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Marc started a call with Fabi
+Okt. 11, 2021 4:15:13 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler respondToCall
+INFO: Fabi accepted the call from Marc
+Okt. 11, 2021 4:15:51 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler endCall
+INFO: The call between Fabi and Marc ended and the Server is available again
+Okt. 11, 2021 4:17:24 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Marc started a call with Fabi
+Okt. 11, 2021 4:18:20 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler respondToCall
+INFO: Fabi declined the call from Marc
+Okt. 11, 2021 4:25:25 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Fabi started a call with Marc
+Okt. 11, 2021 4:25:42 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler respondToCall
+INFO: Marc accepted the call from Fabi
+Okt. 11, 2021 4:26:16 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler endCall
+INFO: The call between Marc and Fabi ended and the Server is available again
+Okt. 11, 2021 4:36:35 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Marc started a call with Fabi
+Okt. 11, 2021 4:37:34 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Marc started a call with Fabi
+Okt. 11, 2021 4:38:02 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler respondToCall
+INFO: Fabi declined the call from Marc
+Okt. 11, 2021 4:38:52 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Marc started a call with Fabi
+Okt. 11, 2021 4:39:11 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Fabi tried to call Fabia but he/she is offline
+Okt. 11, 2021 4:39:18 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler respondToCall
+INFO: Fabi accepted the call from Marc
+Okt. 11, 2021 4:39:43 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler endCall
+INFO: The call between Fabi and Marc ended and the Server is available again
