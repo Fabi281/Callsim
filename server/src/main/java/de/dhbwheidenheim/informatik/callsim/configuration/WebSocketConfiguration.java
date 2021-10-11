@@ -13,12 +13,7 @@ import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 @EnableWebSocket
 public class WebSocketConfiguration implements WebSocketConfigurer {
 
-    @Override
-    public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        //registry.addHandler(unitWebSocketHandler, "/unit").setAllowedOrigins("*");
-    }
-
-
+    // Enable/Export the server endpoint and websocket
     @Bean
     public WebSocket webSocket() {
         return new WebSocket();
@@ -27,5 +22,11 @@ public class WebSocketConfiguration implements WebSocketConfigurer {
     @Bean
     public ServerEndpointExporter serverEndpointExporter() {
         return new ServerEndpointExporter();
+    }
+
+    // Implement websockethandler (no further configuration necessary)
+    @Override
+    public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
+                
     }
 }

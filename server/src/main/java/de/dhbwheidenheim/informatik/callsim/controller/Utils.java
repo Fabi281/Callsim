@@ -23,9 +23,9 @@ import de.dhbwheidenheim.informatik.callsim.model.User;
 public class Utils {
     private static final Logger log = LoggerFactory.getLogger(Utils.class);
 
-    public static void registerUser(User user, String location) {
+    public static void registerUser(User user, String location, ArrayList<User> users) {
+		// Add a user to the list of all current users and save it in a file (and close the Output-Streams)
 		try {
-			ArrayList<User> users = readFromFile(location);
 			users.add(user);
 
 			FileOutputStream fos = new FileOutputStream(location);
@@ -43,9 +43,13 @@ public class Utils {
 	public static ArrayList<User> readFromFile(String location) throws IOException {
 		ArrayList<User> users = new ArrayList<User>();
 		File f = new File(location);
+		// Check if the file exists and create it if not
 		if (!f.exists()) {
 			f.createNewFile();
 		  }
+
+		// Read all users (ArrayList<User>) from the file and store the data in a variable
+		// (and close the Input-Streams) as well as returning said variable
 		try {
 			FileInputStream fis = new FileInputStream(location);
             ObjectInputStream ois = new ObjectInputStream(fis);
@@ -67,7 +71,26 @@ public class Utils {
 		return users;
 	}
 
+	/*
+		In the following there are 3 buildResponse()-Method each for a different usecase:
+			1. For the response regarding the users and their statuses
+			2. For the response regarding the start of a call (The positive response needs the username extra)
+			3. The default response which is used in all other cases
+	*/
+	
 	public static String buildResponse(Map<String, String> User){
+
+		/*
+			Create a JSONObject in the following format:
+			{
+				"Action":"StatusResponse",
+				"User":[
+					{"Username":"Status"},
+					{"Username":"Status"},
+					{"Username":"Status"}
+				]
+			}
+		*/
 
 		JsonArrayBuilder users = Json.createArrayBuilder();
 
@@ -80,6 +103,32 @@ public class Utils {
 			.add("User", users)
             .build();
 
+
+		// Convert the JSONObject to a string as the sendText()-Method expects a string
+        Writer writer = new StringWriter();
+        Json.createWriter(writer).write(res);
+		return writer.toString();
+
+	}
+
+	public static String buildResponse(String Action, String Value, String Username){
+
+		/*
+			Create a JSONObject in the following format:
+			{
+				"Action":"<Actionname>",
+				"Value":"<Value>",
+				"Username":"<Username>"
+			}
+		*/
+
+		JsonObject res = Json.createObjectBuilder()
+            .add("Action", Action)
+            .add("Value", Value)
+			.add("Username", Username)
+            .build();
+
+		// Convert the JSONObject to a string as the sendText()-Method expects a string
         Writer writer = new StringWriter();
         Json.createWriter(writer).write(res);
 		return writer.toString();
@@ -88,24 +137,20 @@ public class Utils {
 
 	public static String buildResponse(String Action, String Value){
 
+		/*
+			Create a JSONObject in the following format:
+			{
+				"Action":"<Actionname>",
+				"Value":"<Value>"
+			}
+		*/
+
 		JsonObject res = Json.createObjectBuilder()
             .add("Action", Action)
             .add("Value", Value)
             .build();
 
-        Writer writer = new StringWriter();
-        Json.createWriter(writer).write(res);
-		return writer.toString();
-
-	}
-	public static String buildResponse(String Action, String Value, String Username){
-
-		JsonObject res = Json.createObjectBuilder()
-            .add("Action", Action)
-            .add("Value", Value)
-			.add("Username", Username)
-            .build();
-
+		// Convert the JSONObject to a string as the sendText()-Method expects a string
         Writer writer = new StringWriter();
         Json.createWriter(writer).write(res);
 		return writer.toString();

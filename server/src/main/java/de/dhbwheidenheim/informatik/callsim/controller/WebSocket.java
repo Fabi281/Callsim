@@ -32,48 +32,65 @@ public class WebSocket {
 
     @OnMessage
     public void onMessage(String message, Session session) throws IOException {
+
+        // Convert the incoming message into JSON and extract the action
+        // the server should take
         JsonReader reader = Json.createReader(new StringReader(message));
         JsonObject jsonMessage = reader.readObject();
         String action = jsonMessage.getString("action");
+
+        // Declare helper variables
         ArrayList<User> users = Utils.readFromFile(DataLocation);
         boolean exists;
 
+        // Take action based on the message-content
         switch (action) {
+
             case "login":
+                // Check if a user with the given parameters(username, password) exists
                 exists = users.stream().filter(p -> (p.getUsername().equals(jsonMessage.getString("Username"))
                         && p.getPassword().equals(jsonMessage.getString("Password")))).findFirst().isPresent();
-                LOGGER.info("Login Bool: " + exists);
 
+                // If one exists and isn´t already logged send a positive response and set the User 
+                // as logged in
                 if (exists && SessionHandler.checkLogin(jsonMessage.getString("Username"))) {
                     session.getBasicRemote()
                             .sendText(Utils.buildResponse("PosLoginResponse", jsonMessage.getString("Username")));
-                            SessionHandler.addSession(session, jsonMessage.getString("Username"));
+                    SessionHandler.addSession(session, jsonMessage.getString("Username"));
                 } else {
+
+                    // If one does not exist or is already logged in send a corresponding negative response
                     String msg;
                     if (!exists)
                         msg = "Username does not exist";
                     else
                         msg = "User is already logged in";
                     session.getBasicRemote().sendText(Utils.buildResponse("NegLoginResponse", msg));
+
                 }
                 break;
 
             case "register":
+                // Check if the username is already taken
                 exists = users.stream().filter(p -> (p.getUsername().equals(jsonMessage.getString("Username"))))
                         .findFirst().isPresent();
+                
+                // If it is taken send a negative response        
                 if (exists) {
                     session.getBasicRemote()
                             .sendText(Utils.buildResponse("NegRegisterResponse", "Username already in use!"));
                 } else {
+                    // If it is not taken register the user and send a positive response
                     User registerUser = new User(jsonMessage.getString("Username"), jsonMessage.getString("Password"));
-                    Utils.registerUser(registerUser, DataLocation);
+                    Utils.registerUser(registerUser, DataLocation, users);
                     session.getBasicRemote()
                             .sendText(Utils.buildResponse("PosRegisterResponse", "Successfully registered!"));
                 }
                 break;
 
             case "UserStatuses":
-                session.getBasicRemote().sendText(Utils.buildResponse(SessionHandler.userListWithStatus(DataLocation)));
+                // Send a Object containing all users and their corresponding status
+                session.getBasicRemote().sendText(Utils.buildResponse(SessionHandler.userListWithStatus(users)));
                 break;
 
             case "startCall":
@@ -90,13 +107,15 @@ public class WebSocket {
                 break;
 
             default:
+                // Send a default message if the client sends an unrecognizable action
                 session.getBasicRemote().sendText(Utils.buildResponse("NotFound", "Not Found"));
-                LOGGER.info("Kein passendes Kommando");
+                LOGGER.info("No corresponding action found");
         }
     }
 
     @OnClose
     public void onClose(Session session) {
+        // Try to delete the session in the handler if the websocket is closed
         try {
             SessionHandler.deleteSession(session);
         } catch (Exception e) {

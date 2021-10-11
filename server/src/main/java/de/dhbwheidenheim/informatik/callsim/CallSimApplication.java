@@ -10,6 +10,7 @@ import de.dhbwheidenheim.informatik.callsim.controller.SessionHandler;
 public class CallSimApplication {
 
 	public static void main(String[] args) {
+		// Start the Application and set the Logger regarding all connection data
 		SpringApplication.run(CallSimApplication.class, args);
 		SessionHandler.setLogger();
 	}
