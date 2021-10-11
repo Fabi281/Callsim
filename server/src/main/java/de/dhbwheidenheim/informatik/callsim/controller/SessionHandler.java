@@ -131,7 +131,7 @@ public class SessionHandler {
         sessions.get(activeUser.get(userToCall)).set(1, "inCall");
 
         activeUser.get(userToCall).getBasicRemote().sendText(Utils.buildResponse("incomingCall", wrapper.availableServer, sessions.get(initialSession).get(0)));
-        initialSession.getBasicRemote().sendText(Utils.buildResponse("startedCall", wrapper.availableServer, userToCall)); 
+        initialSession.getBasicRemote().sendText(Utils.buildResponse("startedCall", wrapper.availableServer)); 
 
         LOGGER.info(sessions.get(initialSession).get(0) + " started a call with " + userToCall);
     }
