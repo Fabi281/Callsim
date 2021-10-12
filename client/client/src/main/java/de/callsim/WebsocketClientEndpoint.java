@@ -147,6 +147,8 @@ public class WebsocketClientEndpoint {
                     client.dialog.dispose();
                     client.dialog = null;
                 }
+                client.callPartnerUsername = null;
+                client.nwPage.gettingCalled = false;
                 client.nwPage.callAccepted = false;
                 client.nwPage.setCallDisplay(false);
                 client.nwPage.log("User ended the call...");
