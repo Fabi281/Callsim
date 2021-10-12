@@ -42,7 +42,7 @@ public class client {
     public static void popupMessage(String msg) {
         JOptionPane pane = new JOptionPane(msg);
         JDialog dialogPane = pane.createDialog((JFrame)null, "Pop Up");
-        dialogPane.setLocationRelativeTo(nwPage.rootPanel);
+        dialogPane.setLocationRelativeTo(frame);
         dialogPane.setVisible(true);
     }
 
@@ -67,7 +67,7 @@ public class client {
 
         icPage.declineBtn.addActionListener(e -> dialog.dispatchEvent(new WindowEvent(dialog, WindowEvent.WINDOW_CLOSING)));
         dialogPane.setSize(200, 220);
-        dialogPane.setLocationRelativeTo(nwPage.rootPanel);
+        dialogPane.setLocationRelativeTo(frame);
         dialogPane.setAutoRequestFocus(true);
         dialogPane.setVisible(true);
         dialogPane.setAlwaysOnTop(true);
@@ -93,7 +93,7 @@ public class client {
         rcPage.endcallBtn.addActionListener(e -> dialog.dispatchEvent(new WindowEvent(dialog, WindowEvent.WINDOW_CLOSING)));
 
         dialogPane.setSize(300, 220);
-        dialogPane.setLocationRelativeTo(nwPage.rootPanel);
+        dialogPane.setLocationRelativeTo(frame);
         dialogPane.setAutoRequestFocus(true);
         dialogPane.setVisible(true);
         dialogPane.setAlwaysOnTop(true);
@@ -139,7 +139,7 @@ public class client {
                 .add("Password", password)
                 .build();
         // send LOGIN message to websocket
-        client.clientEndPoint.sendMessage(value);
+        clientEndPoint.sendMessage(value);
     }
 
     public static void sendRegisterMessage(String username, String password, String passwordCon){
@@ -150,10 +150,10 @@ public class client {
                     .add("Password", password)
                     .build();
             // send REGISTER message to websocket
-            client.clientEndPoint.sendMessage(value);
+            clientEndPoint.sendMessage(value);
         }
         else {
-            client.popupMessage("Passwords do not match!");
+            popupMessage("Passwords do not match!");
         }
     }
 
@@ -164,7 +164,7 @@ public class client {
                 .add("Username", callPartnerUsername)
                 .build();
         // send startCall message to websocket
-        client.clientEndPoint.sendMessage(json);
+        clientEndPoint.sendMessage(json);
     }
 
     public static void sendRespondSelfDeclineMessage(){
@@ -175,7 +175,7 @@ public class client {
                 .add("BBBServer", client.bbbserver)
                 .build();
         // send RESPONDCALL - SELFDECLINE message to websocket
-        client.clientEndPoint.sendMessage(value);
+        clientEndPoint.sendMessage(value);
         callPartnerUsername = null;
     }
 
@@ -186,7 +186,7 @@ public class client {
                 .add("Username", callPartnerUsername)
                 .add("BBBServer", bbbserver)
                 .build();
-        client.clientEndPoint.sendMessage(value);
+        clientEndPoint.sendMessage(value);
     }
 
     public static void sendRespondDeclineMessage(){
@@ -197,7 +197,7 @@ public class client {
                 .add("BBBServer", bbbserver)
                 .build();
         // send RESPONDCALL - DECLINE message to websocket
-        client.clientEndPoint.sendMessage(value);
+        clientEndPoint.sendMessage(value);
         callPartnerUsername = null;
     }
 
@@ -208,6 +208,6 @@ public class client {
                 .add("BBBServer", bbbserver)
                 .build();
         // send ENDCALL message to websocket
-        client.clientEndPoint.sendMessage(value);
+        clientEndPoint.sendMessage(value);
     }
 }
