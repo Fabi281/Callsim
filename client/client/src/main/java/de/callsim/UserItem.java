@@ -15,9 +15,7 @@ public class UserItem extends JPanel {
         userBtn.setContentAreaFilled(false);
         userBtn.setBorderPainted(false);
         userBtn.setForeground(Color.white);
-
         this.setOpaque(false);
-        this.setLayout(new GridLayout(1, 2));
         this.add(userBtn);
     }
 
