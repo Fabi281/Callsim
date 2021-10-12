@@ -126,7 +126,7 @@ public class WebsocketClientEndpoint {
                 bbbserver = jsonMessage.getString("Value");
                 String username = jsonMessage.getString("Username");
                 client.bbbserver = bbbserver;
-                client.incomingCall("Call Incoming from " + username + "...", username);
+                client.incomingCall(username);
                 break;
 
             case "startedCall":

@@ -1,17 +1,8 @@
 package de.callsim;
 
-import javax.json.Json;
-import javax.json.JsonObject;
 import javax.swing.*;
-import javax.swing.border.TitledBorder;
-import javax.swing.plaf.FontUIResource;
-import javax.swing.text.StyleContext;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.util.Locale;
 
 public class Login {
     JTextField usernameField;
@@ -38,18 +29,8 @@ public class Login {
 
     public Login() {
         registerPanel.setVisible(false); /* set this to false on program start, just to be sure */
-        loginBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                triggerLogin();
-            }
-        });
-        toRegister.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                toggleLoginView();
-            }
-        });
+        loginBtn.addActionListener(e -> triggerLogin());
+        toRegister.addActionListener(e -> toggleLoginView());
 
         passwordField.addKeyListener(new KeyAdapter() {
             @Override
@@ -63,18 +44,8 @@ public class Login {
                 keyHandler(e);
             }
         });
-        registerBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                triggerRegister();
-            }
-        });
-        toLogin.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                toggleLoginView();
-            }
-        });
+        registerBtn.addActionListener(e -> triggerRegister());
+        toLogin.addActionListener(e -> toggleLoginView());
     }
 
     /* this method will just switch between loginBtn and registering panel */
@@ -99,36 +70,11 @@ public class Login {
                 // if key not handled, please do NOT trigger popups, that will lead to horrible UX
         }
     }
-
-    public void triggerLogin() {
-        String username = usernameField.getText();
-        String password = passwordField.getText();
-        JsonObject value = Json.createObjectBuilder()
-                .add("action", "login")
-                .add("Username", username)
-                .add("Password", password)
-                .build();
-        // send LOGIN message to websocket
-        client.clientEndPoint.sendMessage(value);
+    public void triggerLogin(){
+        client.sendLoginMessage(usernameField.getText(), passwordField.getText());
     }
-
     public void triggerRegister() {
-        String username = usernameRegField.getText();
-        String password = passwordRegField.getText();
-        String passwordCon = passwordRegConField.getText();
-        if (password.equals(passwordCon)) {
-            JsonObject value = Json.createObjectBuilder()
-                    .add("action", "register")
-                    .add("Username", username)
-                    .add("Password", password)
-                    .build();
-            // send LOGIN message to websocket
-            client.clientEndPoint.sendMessage(value);
-        }
-        else {
-            client.popupMessage("Passwords do not match!");
-        }
-
+        client.sendRegisterMessage(usernameRegField.getText(), passwordRegField.getText(), passwordRegConField.getText());
     }
 
 }

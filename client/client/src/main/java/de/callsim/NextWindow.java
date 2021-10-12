@@ -3,16 +3,8 @@ package de.callsim;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.swing.*;
-import javax.swing.border.TitledBorder;
-import javax.swing.plaf.FontUIResource;
-import javax.swing.text.StyleContext;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import java.util.Locale;
 import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -42,7 +34,8 @@ public class NextWindow {
 
     public ArrayList<String> log;
     final int maxLogs = 10;
-    private String selectedUser = null;
+    public String selectedUser = null;
+    boolean gettingCalled = false;
     boolean callInProgress = false;
     boolean callAccepted = false;
 
@@ -71,7 +64,7 @@ public class NextWindow {
         );
 
         call.addActionListener(e -> {
-            if(!callInProgress) startACall(selectedUser);
+            if(!callInProgress && !gettingCalled) startACall(selectedUser);
         });
         hangUpBtn.addActionListener(e -> cancelCall());
     }
@@ -93,9 +86,11 @@ public class NextWindow {
         for (String key : userData.keySet()){
             UserItem item = new UserItem(key);
             item.getUserBtn().addActionListener(e -> {
-                selectedUser = key;
-                updateCallDisplay();
-                updateBigDisplay(selectedUser);
+                if (!callInProgress && !gettingCalled){
+                    selectedUser = key;
+                    updateCallDisplay();
+                    updateBigDisplay(selectedUser);
+                }
             });
             listPanel.add(item);
 
@@ -109,33 +104,18 @@ public class NextWindow {
 
     public void startACall(String targetUser) {
         sentListRequest();
-        client.callPartnerUsername = targetUser;
-        JsonObject json = Json.createObjectBuilder()
-                .add("action", "startCall")
-                .add("Username", targetUser)
-                .build();
-        // send UserStatuses message to websocket
-        client.clientEndPoint.sendMessage(json);
-
+        if(!callInProgress && !gettingCalled) client.sendStartCallMessage(targetUser);
     }
 
     public void cancelCall() {
 
         log("Cancelling call...");
         setCallDisplay(false);
-        JsonObject value = Json.createObjectBuilder()
-                .add("action", "respondCall")
-                .add("Response", "selfdecline")
-                .add("Username", selectedUser)
-                .add("BBBServer", client.bbbserver)
-                .build();
-        // send respondCall message to websocket
-        client.clientEndPoint.sendMessage(value);
+        client.sendRespondSelfDeclineMessage();
         log("Call has been successfully cancelled");
     }
 
     public void updateBigDisplay(String newUsername) {
-        if (callInProgress) return; /* if a call is in progress, abort */
         if (userData == null) return;
         String nameOfUser = newUsername;
         String stateOfUser = stateColors.get(userData.get(newUsername));
@@ -154,10 +134,6 @@ public class NextWindow {
 
     public void log(String msg) {
         log.add(0, msg); /* always add to beginning */
-        if(log.size() > maxLogs){
-            /* here you could reduce the list so it doensn't mess up the storage */
-        }
-
         stateDisplay.setText(msg);
     }
 
@@ -170,7 +146,6 @@ public class NextWindow {
         callContainer.setVisible(!callInProgress && selectedUser != null);
         hangUpBtn.setVisible(!callAccepted);
         callProgressPanel.setVisible(callInProgress);
-
-        listPanel.setEnabled(!callInProgress); /* when call in progress, disable the sidebar */
+        listPanel.setEnabled(!callInProgress);
     }
 }
