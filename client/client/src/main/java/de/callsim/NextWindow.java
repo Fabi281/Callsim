@@ -38,6 +38,7 @@ public class NextWindow {
     boolean gettingCalled = false;
     boolean callInProgress = false;
     boolean callAccepted = false;
+    boolean updating = false;
 
     HashMap<String, String> userData = new HashMap<>();
     HashMap<String, String> stateColors = new HashMap<String, String>() {{
@@ -70,6 +71,7 @@ public class NextWindow {
     }
 
     public void sentListRequest(){
+        updating = true;
         JsonObject json = Json.createObjectBuilder()
                 .add("action", "UserStatuses")
                 .build();
@@ -86,7 +88,7 @@ public class NextWindow {
         for (String key : userData.keySet()){
             UserItem item = new UserItem(key);
             item.getUserBtn().addActionListener(e -> {
-                if (!callInProgress && !gettingCalled){
+                if (!callInProgress && !gettingCalled && !updating){
                     selectedUser = key;
                     updateCallDisplay();
                     updateBigDisplay(selectedUser);
@@ -98,6 +100,7 @@ public class NextWindow {
         listPanel.add(numberOfUsers);
         numberOfUsers.setText(userData.size() + " user" + (userData.size() != 1 ? "s" : "") + " registered");
         if (selectedUser != null) updateBigDisplay(selectedUser);
+        updating = false;
         updateCallDisplay();
         listPanel.revalidate();
     }
