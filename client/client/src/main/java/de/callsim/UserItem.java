@@ -2,8 +2,6 @@ package de.callsim;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class UserItem extends JPanel {
 
@@ -17,7 +15,6 @@ public class UserItem extends JPanel {
         userBtn.setContentAreaFilled(false);
         userBtn.setBorderPainted(false);
         userBtn.setForeground(Color.white);
-
         this.setOpaque(false);
         this.setLayout(new GridLayout(1, 0));
         this.add(userBtn);

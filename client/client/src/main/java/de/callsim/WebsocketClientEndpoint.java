@@ -207,14 +207,14 @@ public class WebsocketClientEndpoint {
             case "inCall":
                 //Debugging
                 System.out.println("case: inCall");
-
+                client.callPartnerUsername = null;
                 client.nwPage.log("User is in a call...");
                 client.popupMessage(jsonMessage.getString("Value"));
                 break;
             case "Offline":
                 //Debugging
                 System.out.println("case: offline");
-
+                client.callPartnerUsername = null;
                 client.nwPage.log("User is offline");
                 client.popupMessage(jsonMessage.getString("Value"));
                 break;

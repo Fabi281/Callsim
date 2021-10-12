@@ -466,3 +466,13 @@ Okt. 12, 2021 3:23:29 PM de.dhbwheidenheim.informatik.callsim.controller.Session
 INFO: Fabi declined the call from Marc
 Okt. 12, 2021 3:23:32 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler endCall
 INFO: The call between Marc and Fabi ended and the Server is available again
+Okt. 12, 2021 3:39:42 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Fabi tried to call der-bernd but he/she is offline
+Okt. 12, 2021 3:39:44 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Fabi tried to call der-bernd but he/she is offline
+Okt. 12, 2021 3:39:48 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Fabi tried to call der-bernd but he/she is offline
+Okt. 12, 2021 3:40:07 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Fabi tried to call der-bernd but he/she is offline
+Okt. 12, 2021 3:42:05 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Fabi tried to call Ferdinand but he/she is offline
