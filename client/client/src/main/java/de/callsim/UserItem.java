@@ -13,14 +13,13 @@ public class UserItem extends JPanel {
     public UserItem(String name){
         this.name = name;
         userBtn = new JButton(this.name);
-        userBtn.setHorizontalAlignment(SwingConstants.LEFT);
         userBtn.setOpaque(false);
         userBtn.setContentAreaFilled(false);
         userBtn.setBorderPainted(false);
         userBtn.setForeground(Color.white);
 
         this.setOpaque(false);
-        this.setLayout(new GridLayout(1, 2));
+        this.setLayout(new GridLayout(1, 0));
         this.add(userBtn);
     }
 

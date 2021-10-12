@@ -31,6 +31,8 @@ public class NextWindow {
     JPanel contentPanel;
     JPanel statePanel;
     JLabel stateDisplay;
+    private JScrollPane ScrollPane;
+    private JTextField textField1;
 
     public ArrayList<String> log;
     final int maxLogs = 10;
@@ -84,7 +86,9 @@ public class NextWindow {
         for(Component comp : listPanel.getComponents()){
             listPanel.remove(comp);
         }
-        listPanel.setLayout(new GridLayout(0, 1));
+        listPanel.setLayout(new GridLayout(0,1));
+        listPanel.setPreferredSize(new Dimension(150,userData.size()*50));
+
         for (String key : userData.keySet()){
             UserItem item = new UserItem(key);
             item.getUserBtn().addActionListener(e -> {
@@ -103,6 +107,7 @@ public class NextWindow {
         updating = false;
         updateCallDisplay();
         listPanel.revalidate();
+        ScrollPane.getVerticalScrollBar().setUnitIncrement(5);
     }
 
     public void startACall(String targetUser) {
