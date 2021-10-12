@@ -62,7 +62,7 @@ public class WebSocket {
                     // If one does not exist or is already logged in send a corresponding negative response
                     String msg;
                     if (!exists)
-                        msg = "Username does not exist";
+                        msg = "The Username or Password is invalid";
                     else
                         msg = "User is already logged in";
                     session.getBasicRemote().sendText(Utils.buildResponse("NegLoginResponse", msg));

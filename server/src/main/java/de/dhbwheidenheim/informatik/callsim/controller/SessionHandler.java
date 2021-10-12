@@ -161,6 +161,7 @@ public class SessionHandler {
 
         }else if(response.equals("selfdecline")){
             // The action if the caller declines before the user which is being called can accept/decline
+            LOGGER.info("The caller " + sessions.get(initialSession).get(0) + " declined himself/herself");
             endCall(initialSession, user, usedServer);
 
         }else{
