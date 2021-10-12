@@ -75,9 +75,9 @@ public class client {
             @Override
             public void windowClosing(WindowEvent e) {
                 nwPage.callInProgress = false;
+                nwPage.gettingCalled = false;
                 dialog.dispose();
                 dialog = null;
-                nwPage.gettingCalled = false;
                 sendRespondDeclineMessage();
             }
         });
