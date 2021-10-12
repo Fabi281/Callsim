@@ -113,7 +113,7 @@ public class client {
         frame = new JFrame("CallSim Login");
         frame.setContentPane(loginPage.root_panel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        Dimension size = new Dimension(600,500);
+        Dimension size = new Dimension(600,600);
         frame.setMinimumSize(size);
         frame.setMaximumSize(size); /* so you cannot change size of panel, but should fit everything */
         frame.pack();
@@ -125,9 +125,20 @@ public class client {
         frame.setTitle("CallSim App - " + clientUsername);
         frame.setContentPane(nwPage.rootPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setMinimumSize(new Dimension(400, 450)); // ref: https://stackoverflow.com/a/2782041
+        frame.setMinimumSize(new Dimension(600, 600)); // ref: https://stackoverflow.com/a/2782041
         frame.pack();
         frame.setVisible(true);
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                if (nwPage.gettingCalled && callPartnerUsername != null){
+                    sendRespondDeclineMessage();
+                }
+                else if(callPartnerUsername != null){
+                    sendEndCallMessage();
+                }
+            }
+        });
     }
 
     // connection handling
