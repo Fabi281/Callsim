@@ -32,10 +32,8 @@ public class NextWindow {
     JPanel statePanel;
     JLabel stateDisplay;
     private JScrollPane ScrollPane;
-    private JTextField textField1;
 
     public ArrayList<String> log;
-    final int maxLogs = 10;
     public String selectedUser = null;
     boolean gettingCalled = false;
     boolean callInProgress = false;
