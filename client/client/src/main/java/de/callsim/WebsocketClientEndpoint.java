@@ -3,7 +3,8 @@ package de.callsim;
 import java.io.StringReader;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 import java.awt.Desktop;
 import java.io.IOException;
@@ -27,7 +28,8 @@ public class WebsocketClientEndpoint {
             container.connectToServer(this, endpointURI);
         } catch (Exception e) {
             client.popupMessage("Server is not active.\n" + e.toString());
-            throw new RuntimeException(e);
+            System.err.println(e.toString());
+            System.exit(1);
         }
     }
 

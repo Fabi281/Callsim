@@ -1,6 +1,8 @@
 package de.callsim;
 
-import javax.swing.*;
+import javax.swing.JPanel;
+import javax.swing.JButton;
+import javax.swing.JLabel;
 
 public class RunningCall {
     public JPanel rootPanel;

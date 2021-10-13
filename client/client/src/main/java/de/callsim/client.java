@@ -1,6 +1,6 @@
 package de.callsim;
 
-import java.awt.*;
+import java.awt.Dimension;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.net.URI;
@@ -8,7 +8,9 @@ import java.net.URISyntaxException;
 
 import javax.json.Json;
 import javax.json.JsonObject;
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 
 public class client {
     private static JFrame frame; // JFrame that Displays all the Windows
