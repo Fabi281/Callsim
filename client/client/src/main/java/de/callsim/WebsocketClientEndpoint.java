@@ -12,14 +12,7 @@ import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
-import javax.websocket.ClientEndpoint;
-import javax.websocket.CloseReason;
-import javax.websocket.ContainerProvider;
-import javax.websocket.OnClose;
-import javax.websocket.OnMessage;
-import javax.websocket.OnOpen;
-import javax.websocket.Session;
-import javax.websocket.WebSocketContainer;
+import javax.websocket.*;
 
 @ClientEndpoint
 public class WebsocketClientEndpoint {
@@ -27,7 +20,9 @@ public class WebsocketClientEndpoint {
     Session userSession = null;
 
     public WebsocketClientEndpoint(URI endpointURI) {
+        // Try and initiate a new connection via a Websocket
         try {
+            // Create a WebsocketContainer for the client and establish a connection using said container
             WebSocketContainer container = ContainerProvider.getWebSocketContainer();
             container.connectToServer(this, endpointURI);
         } catch (Exception e) {
@@ -43,15 +38,16 @@ public class WebsocketClientEndpoint {
     }
 
     @OnClose
-    public void onClose(Session userSession, CloseReason reason) {
+    public void onClose(Session userSession) {
         System.out.println("closing websocket");
         this.userSession = null;
     }
 
-    //The Server triggers the onMessage Function
+    // React on messages from the server
     @OnMessage
-    public void onMessage(String message) throws URISyntaxException {
+    public void onMessage(String message){
 
+        // Convert the incoming message into a JSON-Object and extract the action
         JsonReader reader = Json.createReader(new StringReader(message));
         JsonObject jsonMessage = reader.readObject();
         String action = jsonMessage.getString("Action");
@@ -60,63 +56,75 @@ public class WebsocketClientEndpoint {
 
         switch (action) {
             case "PosLoginResponse": // On successful Login
-                //Debugging
+                // Debugging
                 System.out.println("case: PosLoginResponse");
 
-                client.clientUsername = jsonMessage.getString("Value"); // save the username that has logged in
-                client.nwPage = new NextWindow(); // creating the NextWindow Object and setting assigning it to nwPage in client
+                client.clientUsername = jsonMessage.getString("Value"); // Save the username that has logged in
+                client.nwPage = new NextWindow(); // Creating the NextWindow Object and assigning it to nwPage
                 client.showAppPage(); // Close the Login Page and show the NextWindow Page
                 break;
 
-            case "NegLoginResponse": // On unsuccessful Login
-                //Debugging
+            case "NegLoginResponse": // On failed Login
+                // Debugging
                 System.out.println("case: NegLoginResponse");
 
-                client.popupMessage(jsonMessage.getString("Value")); // show a PopUp Message with the Server Message
+                // Show a PopUp Message with the Server Message
+                client.popupMessage(jsonMessage.getString("Value"));
                 break;
 
             case "PosRegisterResponse": // On successful Register
-                //Debugging
+                // Debugging
                 System.out.println("case: PosRegisterResponse");
-                client.popupMessage(jsonMessage.getString("Value")); // show a PopUp message with the Server Message
+
+                // Show a PopUp message with the Server Message
+                client.popupMessage(jsonMessage.getString("Value"));
                 break;
 
-            case "NegRegisterResponse": // On unsuccessful Register
-                //Debugging
+            case "NegRegisterResponse": // On failed Register
+                // Debugging
                 System.out.println("case: NegRegisterResponse");
-                client.popupMessage(jsonMessage.getString("Value")); // show a PopUp message with the Server Message
+
+                // Show a PopUp message with the Server Message
+                client.popupMessage(jsonMessage.getString("Value"));
                 break;
 
             case "StatusResponse":
-                //Debugging
+                // Debugging
                 System.out.println("case: statusResponse");
-                JsonArray user = jsonMessage.getJsonArray("User"); // create a Json Array
-                ArrayList<JsonObject> list = new ArrayList<>(); // create a ArrayList
-                //HashMap does not guarantee iteration-order, while LinkedHashmap does
-                LinkedHashMap<String, String> userData = new LinkedHashMap();
+
+                // Extract a JSON-Array from the message
+                JsonArray user = jsonMessage.getJsonArray("User");
+                ArrayList<JsonObject> list = new ArrayList<>();
+
+                // Hashmap does not guarantee iteration-order, while Linked Hashmap does
+                LinkedHashMap<String, String> userData = new LinkedHashMap<>();
+
                 for(int i = 0; i < user.size(); i++){
-                    if(!user.getJsonObject(i).containsKey(client.clientUsername)) list.add(user.getJsonObject(i)); // Add every User except current User to the list
+                    // Add every User except current User to the list
+                    if(!user.getJsonObject(i).containsKey(client.clientUsername)) list.add(user.getJsonObject(i));
                 }
-                // Sort every user in list
+                // Sort every user in list by username
                 list.sort((o1, o2) -> {
                     String one = o1.keySet().toString().toUpperCase();
                     String two = o2.keySet().toString().toUpperCase();
                     return one.compareTo(two);
                 });
+
                 // Add every User to the Linked Hashmap
                 list.forEach(object -> {
                     for (String key: object.keySet()){
                         userData.put(key, object.get(key).toString());
                     }
                 });
-                // trigger the getListResponse function inside NextWindow();
+
+                // Trigger the getListResponse function inside NextWindow();
                 client.nwPage.getListResponse(userData);
                 break;
 
             case "incomingCall":
-                //Save the BBB Link and trigger the incomingCall() function inside client
+                // Save the BBB Link and trigger the incomingCall() function inside client
 
-                //Debugging
+                // Debugging
                 System.out.println("case: incomingCall");
 
                 client.nwPage.log("New call incoming...");
@@ -129,7 +137,7 @@ public class WebsocketClientEndpoint {
             case "startedCall":
                 // Set the Call Display and save the BBB Link
 
-                //Debugging
+                // Debugging
                 System.out.println("case: startedCall");
 
                 client.nwPage.setCallDisplay(true);
@@ -140,9 +148,9 @@ public class WebsocketClientEndpoint {
                 break;
 
             case "RemoteCallEnded":
-                //Update the Log inside NextWindow and set callPartner to null and gettingCalled, call Accapted and callInProgress to false
+                // Set callPartner to null and gettingCalled, callAccepted and callInProgress to false
 
-                //Debugging
+                // Debugging
                 System.out.println("case: RemoteCallEnded");
                 if(client.dialog != null){
                     client.dialog.dispose();
@@ -156,9 +164,9 @@ public class WebsocketClientEndpoint {
                 break;
 
             case "SelfCallEnded":
-                //Update the Log inside NextWindow and set gettingCalled, call Accapted and callInProgress to false
+                // Set gettingCalled, call Accepted and callInProgress to false
 
-                //Debugging
+                // Debugging
                 System.out.println("case: selfCallEnded");
 
                 client.nwPage.callAccepted = false;
@@ -167,9 +175,9 @@ public class WebsocketClientEndpoint {
                 break;
 
             case "SelfCallAccepted":
-                //Open the BBB-Link in standard browser, update the Display and set callAccepted to true
+                // Open the BBB-Link in standard browser, update the Display and set callAccepted to true
 
-                //Debugging
+                // Debugging
                 System.out.println("case: selfCallAccepted");
 
                 openURL(jsonMessage.getString("Value"));
@@ -180,9 +188,9 @@ public class WebsocketClientEndpoint {
                 break;
 
             case "RemoteCallAccepted":
-                //Open the BBB-Link in standard browser, update the Display and set callAccepted to true
+                // Open the BBB-Link in standard browser, update the Display and set callAccepted to true
 
-                //Debugging
+                // Debugging
                 System.out.println("case: remoteCallAccepted");
 
                 openURL(jsonMessage.getString("Value"));
@@ -193,9 +201,9 @@ public class WebsocketClientEndpoint {
                 break;
 
             case "SelfCallDeclined":
-                //Open the BBB-Link in standard browser, update the Display and set callAccepted to true
+                // Open the BBB-Link in standard browser, update the Display and set callAccepted to true
 
-                //Debugging
+                // Debugging
                 System.out.println("case: selfCallDeclined");
 
                 client.nwPage.log("You declined the call...");
@@ -204,9 +212,9 @@ public class WebsocketClientEndpoint {
                 break;
 
             case "RemoteCallDeclined":
-                //close the dialog and set callAccepted and callInProgress to false
+                // Close the dialog and set callAccepted and callInProgress to false
 
-                //Debugging
+                // Debugging
                 System.out.println("case: remoteCallDeclined");
 
                 if(client.dialog != null){
@@ -218,18 +226,18 @@ public class WebsocketClientEndpoint {
                 client.nwPage.log("User declined your call...");
                 break;
             case "inCall":
-                //Show a PopUp Message and set callPartnerUsername to null
+                // Show a PopUp Message and set callPartnerUsername to null
 
-                //Debugging
+                // Debugging
                 System.out.println("case: inCall");
                 client.callPartnerUsername = null;
                 client.nwPage.log("User is in a call...");
                 client.popupMessage(jsonMessage.getString("Value"));
                 break;
             case "Offline":
-                //Show a PopUp Message and set callPartnerUsername to null
+                // Show a PopUp Message and set callPartnerUsername to null
 
-                //Debugging
+                // Debugging
                 System.out.println("case: offline");
                 client.callPartnerUsername = null;
                 client.nwPage.log("User is offline");
@@ -238,9 +246,9 @@ public class WebsocketClientEndpoint {
 
 
             default:
-                //Debugging
+                // Debugging
                 System.out.println("case: default");
-                System.out.println("Keine gültige Rückmeldung");
+                System.out.println("Not a valid response");
         }
     }
 
@@ -251,11 +259,10 @@ public class WebsocketClientEndpoint {
     public void openURL(String bbburl){
         Desktop desktop = java.awt.Desktop.getDesktop();
         try {
-            //specify the protocol along with the URL
+            // Create a new URI-Object using the Server-URL and open it in a browser
             URI oURL = new URI(bbburl);
             desktop.browse(oURL);
         } catch (URISyntaxException | IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }

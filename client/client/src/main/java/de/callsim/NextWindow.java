@@ -50,16 +50,14 @@ public class NextWindow {
 
     }};
 
-    /* ref: https://www.baeldung.com/java-initialize-hashmap#the-static-initializer-for-a-static-hashmap*/
-
     public NextWindow() {
-        log = new ArrayList<String>(); // Setting up a new LOG-Display thats shows in the left button corner the current action
+        log = new ArrayList<String>(); // Setting up a new Log-Display showing the current action on the bottom left
         log(client.clientUsername + " logged in"); // Upon start, show that you're successfully logged in
-        callContainer.setVisible(false); // Dont show the call Container.
+        callContainer.setVisible(false); // Don´t show the call Container.
 
         /*
-         Setting up a Timer repeats itself in a 5sec intervall and acts as a parallel thread.
-         Every 5 seconds, send a get List action to the websocket and upon response, update the UserList and User activity
+         Create a Timer which sends a getListRequest every 5 seconds and upon response,
+         updates the UserList and User activity
          */
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(
@@ -72,36 +70,37 @@ public class NextWindow {
         );
 
         call.addActionListener(e -> {
-            if(!callInProgress && !gettingCalled) startACall(selectedUser); // Only be able to make a call if you're in no call and are not getting called
+            // Only be able to make a call if you're in no call and are not getting called
+            if(!callInProgress && !gettingCalled) startACall(selectedUser);
         });
         hangUpBtn.addActionListener(e -> cancelCall()); // send a end call action
     }
 
     // Function that sends a User Status message to the websocket
     public void sentListRequest(){
-        updating = true; //whilst updating the List, interacting with List-Items should be deactivated to avoid bugs
+        updating = true; // Whilst updating the List, interacting with List-Items should be deactivated to avoid bugs
         JsonObject json = Json.createObjectBuilder()
                 .add("action", "UserStatuses")
                 .build();
-        // send UserStatuses message to websocket
+        // send UserStatuses message to Websocket
         client.clientEndPoint.sendMessage(json);
     }
 
-    // Websocket triggers that function with a new user List
+    // Websocket triggers this function with a new user(-status) List
     public void getListResponse(HashMap<String, String> userData){
-        //update the userData Hashmap
+        // Update the userData Hashmap
         this.userData = userData;
-        // remove all old values
+        // Remove all old values
         for(Component comp : listPanel.getComponents()){
             listPanel.remove(comp);
         }
         listPanel.setLayout(new GridLayout(0,1));
         listPanel.setPreferredSize(new Dimension(150,userData.size()*50));
 
-        //add new List-Items
+        // Add new List-Items
         for (String key : userData.keySet()){
             UserItem item = new UserItem(key);
-            // setting up action Listeners
+            // Set up action Listeners
             item.getUserBtn().addActionListener(e -> {
                 if (!callInProgress && !gettingCalled && !updating){
                     selectedUser = key;
@@ -112,7 +111,7 @@ public class NextWindow {
             listPanel.add(item);
 
         }
-        // updating the number of Users
+        // Updating the number of Users
         numberOfUsers.setText(userData.size() + " user" + (userData.size() != 1 ? "s" : "") + " registered");
         if (selectedUser != null) updateBigDisplay(selectedUser);
         updating = false; // enabling the interactivity with List-Items
@@ -121,13 +120,13 @@ public class NextWindow {
         ScrollPane.getVerticalScrollBar().setUnitIncrement(5);
     }
 
-    //starting a call and updating the display
+    // Starting a call and updating the display
     public void startACall(String targetUser) {
         sentListRequest();
         if(!callInProgress && !gettingCalled) client.sendStartCallMessage(targetUser);
     }
 
-    //canceling a call, updating the log and update the display
+    // Canceling a call, updating the log and update the display
     public void cancelCall() {
 
         log("Cancelling call...");
@@ -145,7 +144,7 @@ public class NextWindow {
         String nameOfUser = newUsername;
         String stateOfUser = stateColors.get(userData.get(newUsername));
 
-        //Setting up the color coding
+        // Setting up the color coding
         String color = stateOfUser.split(";")[0];
         int colorR = Integer.parseInt(color.split(",")[0]),
                 colorG = Integer.parseInt(color.split(",")[1]),
@@ -170,7 +169,7 @@ public class NextWindow {
         updateCallDisplay();
     }
 
-    //Update the Display
+    // Update the Display
     public void updateCallDisplay() {
         callContainer.setVisible(!callInProgress && selectedUser != null);
         hangUpBtn.setVisible(!callAccepted);

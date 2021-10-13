@@ -11,25 +11,25 @@ import javax.json.JsonObject;
 import javax.swing.*;
 
 public class client {
-    private static JFrame frame; //JFrame that Displays all the Windows
+    private static JFrame frame; // JFrame that Displays all the Windows
     // Every variable has been made public in Order to be accessible inside WebsocketClientEndpoint
-    public static WebsocketClientEndpoint clientEndPoint; //Websocket Object
+    public static WebsocketClientEndpoint clientEndPoint; // Websocket Object
     public static Login loginPage; //Login-Page Object
-    public static NextWindow nwPage; //Next-Window-Page Object
+    public static NextWindow nwPage; // Next-Window-Page Object
     public static JDialog dialog; // Dialog Object
     public static String clientUsername; // Username of the client that is logged in
     public static String callPartnerUsername = null; // Username of the Person that has been called
     public static String bbbserver; // The BBB-Link
 
-    //Main Function. This function will be executed upon starting the App
+    // Main Function. This function will be executed upon starting the App
     public static void main(String[] args) {
-        //Check whether a connection to the Websocket could be made. On true, show the Login-Page
+        // Check whether a connection to the Websocket could be made. On true, show the Login-Page
         if(ConnectionInit()) showLoginPage();
     }
 
-    //Connecting to the Web-Socket
+    // Connecting to the Web-Socket
     public static boolean ConnectionInit(){
-        //try to make a connection. On Success, return true. Else return false
+        // Try to establish a connection. On Success, return true. Else return false
         try {
             // open websocket
             clientEndPoint = new WebsocketClientEndpoint(new URI("ws://localhost:8787/ws"));
@@ -45,53 +45,53 @@ public class client {
 
     // Windows
 
-    //Function to create PopUp Messages. Parameter is a String with a Message that should be displayed
+    // Function to create PopUp Messages. Parameter is a String with a Message that should be displayed
     public static void popupMessage(String msg) {
-        //Creating a Option Pane with the Text-Message
+        // Creating an Option Pane with the Text-Message
         JOptionPane pane = new JOptionPane(msg);
-        //Creating the Dialog Window with the Title "Pop Up"
+        // Creating the Dialog Window with the Title "Pop Up"
         JDialog dialogPane = pane.createDialog((JFrame)null, "Pop Up");
-        //center the PopUp inside the JFrame
+        // Center the PopUp inside the JFrame
         dialogPane.setLocationRelativeTo(frame);
-        //Make the PopUp visible
+        // Make the PopUp visible
         dialogPane.setVisible(true);
     }
 
-    //Dialog Message that shows a incoming call from a person
+    // Dialog Message that shows an incoming call from a person
     public static void incomingCall(String username){
         // Setting the call partner
         callPartnerUsername = username;
         // Set gettingCalled to true in Order to limit functionallity
         nwPage.gettingCalled = true;
-        //Create new Dialog
+        // Create new Dialog
         JDialog dialogPane = new JDialog();
-        //Create new Incoming Call Object
+        // Create new Incoming Call Object
         IncomingCall icPage = new IncomingCall();
-        //Add the InComingCall rootPanel to the Dialog-Pane
+        // Add the InComingCall rootPanel to the Dialog-Pane
         dialogPane.add(icPage.rootPanel);
-        //Setting the Title
+        // Setting the Title
         dialogPane.setTitle("Incoming Call...");
-        //Setting the displayed Username
+        // Setting the displayed Username
         icPage.nameLabel.setText(username);
-        //Add a actionListener to the accept button
+        // Add an actionListener to the accept button
         icPage.acceptBtn.addActionListener(e -> {
             nwPage.selectedUser = username;
             dialog.dispose();
             dialog = null;
-            //Sends a Message to the Websocket
+            // Sends a Message to the Websocket
             sendRespondAcceptMessage();
-            //Display Person you're in a call with
+            // Display Person you're in a call with
             nwPage.updateBigDisplay(username);
             nwPage.setCallDisplay(true);
-            //No longer in gettingCalled state, but in callInProgress State
+            // No longer in gettingCalled state, but in callInProgress State
             nwPage.gettingCalled = false;
         });
-        //Add a actionListener to the accept button
+        // Add an actionListener to the accept button
         icPage.declineBtn.addActionListener(e -> {
             // On decline, close window and trigger the Window Closing Operation
             dialog.dispatchEvent(new WindowEvent(dialog, WindowEvent.WINDOW_CLOSING));
         });
-        //Setting up some configurations like size, location, visibility, etc.
+        // Setting up some configurations like size, location, visibility, etc.
         dialogPane.setSize(200, 220);
         dialogPane.setLocationRelativeTo(frame);
         dialogPane.setAutoRequestFocus(true);
@@ -135,9 +135,9 @@ public class client {
             @Override
             public void windowClosing(WindowEvent e) {
                 /*
-                Sending a end call response to the websocket, close the Dialog Pane and set callPartner to null.
+                Sending an end call response to the websocket, close the Dialog Pane and set callPartner to null.
                 callPartner null is important because on exiting the App, it checks if you're still in a call or not
-                and sends a decline call or end call response to the websocket if callPartnerUsername unequal null
+                and sends a decline call or end call response to the websocket if callPartnerUsername not equal null
                  */
                 sendEndCallMessage();
                 dialog.dispose();
@@ -148,7 +148,7 @@ public class client {
         dialog = dialogPane;
     }
 
-    //Shows the Login Page
+    // Shows the Login Page
     public static void showLoginPage(){
         frame = new JFrame("CallSim Login");
         frame.setContentPane(loginPage.root_panel);
@@ -160,7 +160,7 @@ public class client {
         frame.setVisible(true);
     }
 
-    //Shows the NextWindow Page
+    // Shows the NextWindow Page
     public static void showAppPage(){
         if(frame == null) frame = new JFrame("CallSim App - " + clientUsername);
         frame.setTitle("CallSim App - " + clientUsername);
@@ -186,7 +186,7 @@ public class client {
         });
     }
 
-    // connection handling
+    // Connection handling
 
     // Build a JSONObject and send it to the Websocket. LOGIN
     public static void sendLoginMessage(String username, String password){

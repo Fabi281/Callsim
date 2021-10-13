@@ -28,7 +28,7 @@ public class Login {
     Boolean isLogin = true;
 
     public Login() {
-        registerPanel.setVisible(false); /* set this to false on program start. Login Page should be shown first */
+        registerPanel.setVisible(false); // Set this to false on program start. Login Page should be shown first
         loginBtn.addActionListener(e -> triggerLogin()); // On clicking Login Button, trigger a login action
         toRegister.addActionListener(e -> toggleLoginView()); // Show the register Page
 
@@ -49,7 +49,7 @@ public class Login {
         toLogin.addActionListener(e -> toggleLoginView()); // Show the Login Page
     }
 
-    /* this method will just switch between loginBtn and registering panel */
+    // This method will just switch between login and register panel
     public void toggleLoginView() {
 
         if (isLogin) {
@@ -62,20 +62,21 @@ public class Login {
         isLogin = !isLogin;
     }
 
-    public void keyHandler(KeyEvent e) { // better way of handling, but still not the best solution: has to be applied to each new field of form
-        int keycode = (int) e.getKeyChar(); // ref: https://stackoverflow.com/a/16939321, will also handle ENTER: ENTER's char will be empty when you print it because it is a newline.
+    public void keyHandler(KeyEvent e) {
+        // ref: https://stackoverflow.com/a/16939321
+        int keycode = (int) e.getKeyChar();
         switch (keycode) {
             case 10: // ENTER
                 triggerLogin();
             default:
-                // if key not handled, please do NOT trigger popups, that will lead to horrible UX
+                // If key not handled, please do NOT trigger popups, that will lead to horrible UX
         }
     }
-    // Trigger Login Action a send a Message to the Websocket
+    // Trigger Login Action
     public void triggerLogin(){
         client.sendLoginMessage(usernameField.getText(), passwordField.getText());
     }
-    // Trigger Register Action a send a Message to the Websocket
+    // Trigger Register Action
     public void triggerRegister() {
         client.sendRegisterMessage(usernameRegField.getText(), passwordRegField.getText(), passwordRegConField.getText());
     }
