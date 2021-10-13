@@ -3,7 +3,8 @@ package de.callsim;
 import java.io.StringReader;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 import java.awt.Desktop;
 import java.io.IOException;

@@ -2,8 +2,16 @@ package de.callsim;
 
 import javax.json.Json;
 import javax.json.JsonObject;
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JPanel;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JProgressBar;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import java.awt.Component;
+import java.awt.GridLayout;
+import java.awt.Dimension;
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Timer;

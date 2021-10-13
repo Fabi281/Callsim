@@ -1,6 +1,11 @@
 package de.callsim;
 
-import javax.swing.*;
+
+import javax.swing.JTextField;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JButton;
+import javax.swing.JTabbedPane;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
@@ -71,12 +76,18 @@ public class Login {
                 // if key not handled, please do NOT trigger popups, that will lead to horrible UX
         }
     }
-    // Trigger Login Action a send a Message to the Websocket
+    // Trigger Login Action to send a Message to the Websocket
     public void triggerLogin(){
-        client.sendLoginMessage(usernameField.getText(), passwordField.getText());
+        client.sendLoginMessage(usernameField.getText(), passwordField.getPassword().toString());
     }
-    // Trigger Register Action a send a Message to the Websocket
+    // Trigger Register Action to send a Message to the Websocket
     public void triggerRegister() {
+        /*
+        We used getText() on the passwordFields instead of getPassword() because of 2 reasons:
+        1.) The Server needs a String and getPassword() returns a char[]
+        2.) Upon parsing char[] into a String via the toString() method, those two Fields return different values even when given the same text.
+            This makes comparing and saving the password extremely difficult.
+         */
         client.sendRegisterMessage(usernameRegField.getText(), passwordRegField.getText(), passwordRegConField.getText());
     }
 
