@@ -101,7 +101,7 @@ public class NextWindow {
             listPanel.add(item);
 
         }
-        listPanel.add(numberOfUsers);
+        //listPanel.add(numberOfUsers);
         numberOfUsers.setText(userData.size() + " user" + (userData.size() != 1 ? "s" : "") + " registered");
         if (selectedUser != null) updateBigDisplay(selectedUser);
         updating = false;
