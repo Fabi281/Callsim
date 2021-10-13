@@ -28,10 +28,11 @@ public class Login {
     Boolean isLogin = true;
 
     public Login() {
-        registerPanel.setVisible(false); /* set this to false on program start, just to be sure */
-        loginBtn.addActionListener(e -> triggerLogin());
-        toRegister.addActionListener(e -> toggleLoginView());
+        registerPanel.setVisible(false); /* set this to false on program start. Login Page should be shown first */
+        loginBtn.addActionListener(e -> triggerLogin()); // On clicking Login Button, trigger a login action
+        toRegister.addActionListener(e -> toggleLoginView()); // Show the register Page
 
+        // On pressing Enter whilst in Username or Password, trigger the Login event
         passwordField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyTyped(KeyEvent e) {
@@ -44,8 +45,8 @@ public class Login {
                 keyHandler(e);
             }
         });
-        registerBtn.addActionListener(e -> triggerRegister());
-        toLogin.addActionListener(e -> toggleLoginView());
+        registerBtn.addActionListener(e -> triggerRegister()); // On clicking Register Button, trigger a register action
+        toLogin.addActionListener(e -> toggleLoginView()); // Show the Login Page
     }
 
     /* this method will just switch between loginBtn and registering panel */
@@ -70,9 +71,11 @@ public class Login {
                 // if key not handled, please do NOT trigger popups, that will lead to horrible UX
         }
     }
+    // Trigger Login Action a send a Message to the Websocket
     public void triggerLogin(){
         client.sendLoginMessage(usernameField.getText(), passwordField.getText());
     }
+    // Trigger Register Action a send a Message to the Websocket
     public void triggerRegister() {
         client.sendRegisterMessage(usernameRegField.getText(), passwordRegField.getText(), passwordRegConField.getText());
     }
