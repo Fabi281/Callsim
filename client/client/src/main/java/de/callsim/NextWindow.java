@@ -40,7 +40,6 @@ public class NextWindow {
     JPanel statePanel;
     JLabel stateDisplay;
     private JScrollPane ScrollPane;
-    private JTextField textField1;
 
     public ArrayList<String> log;
     public String selectedUser = null;
