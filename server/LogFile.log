@@ -538,3 +538,27 @@ Okt. 13, 2021 6:21:20 PM de.dhbwheidenheim.informatik.callsim.controller.Session
 INFO: Fabi tried to call Marc but he/she is offline
 Okt. 13, 2021 6:21:24 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
 INFO: Fabi tried to call Test but he/she is offline
+Okt. 13, 2021 6:27:24 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Fabi tried to call null but he/she is offline
+Okt. 13, 2021 6:28:07 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: Fabi started a call with null
+Okt. 13, 2021 6:28:09 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler respondToCall
+INFO: null accepted the call from Fabi
+Okt. 13, 2021 6:28:40 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler endCall
+INFO: The call between Fabi and null ended and the Server is available again
+Okt. 13, 2021 6:30:37 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: null started a call with Fabi
+Okt. 13, 2021 6:30:39 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler respondToCall
+INFO: Fabi declined the call from null
+Okt. 13, 2021 6:30:43 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: null started a call with Fabi
+Okt. 13, 2021 6:30:45 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler respondToCall
+INFO: The caller null declined himself/herself
+Okt. 13, 2021 6:30:45 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler endCall
+INFO: The call between null and Fabi ended and the Server is available again
+Okt. 13, 2021 6:30:52 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler startCall
+INFO: null started a call with Fabi
+Okt. 13, 2021 6:30:53 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler respondToCall
+INFO: The caller null declined himself/herself
+Okt. 13, 2021 6:30:53 PM de.dhbwheidenheim.informatik.callsim.controller.SessionHandler endCall
+INFO: The call between null and Fabi ended and the Server is available again

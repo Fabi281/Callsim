@@ -33,7 +33,8 @@ public class WebsocketClientEndpoint {
             container.connectToServer(this, endpointURI);
         } catch (Exception e) {
             client.popupMessage("Server is not active.\n" + e.toString());
-            throw new RuntimeException(e);
+            System.err.println(e.toString());
+            System.exit(1);
         }
     }
 
