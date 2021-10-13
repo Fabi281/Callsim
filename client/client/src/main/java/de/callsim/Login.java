@@ -76,10 +76,6 @@ public class Login {
                 // if key not handled, please do NOT trigger popups, that will lead to horrible UX
         }
     }
-    // Trigger Login Action to send a Message to the Websocket
-    public void triggerLogin(){
-        client.sendLoginMessage(usernameField.getText(), passwordField.getPassword().toString());
-    }
     // Trigger Register Action to send a Message to the Websocket
     public void triggerRegister() {
         /*
@@ -89,6 +85,11 @@ public class Login {
             This makes comparing and saving the password extremely difficult.
          */
         client.sendRegisterMessage(usernameRegField.getText(), passwordRegField.getText(), passwordRegConField.getText());
+    }
+    
+    // Trigger Login Action to send a Message to the Websocket
+    public void triggerLogin(){
+        client.sendLoginMessage(usernameField.getText(), passwordField.getText());
     }
 
 }
