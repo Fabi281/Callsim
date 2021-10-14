@@ -1,4 +1,5 @@
 # Callsim
+(This project is also accessible via the following link: https://github.com/Fabi281/Callsim)
 
 The application consists of two seperate programms.
 
