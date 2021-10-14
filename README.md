@@ -30,4 +30,5 @@ To start the client either:
 - Open the CMD-Script in the "Executable"-Folder in the "client"-Folder
 - Open the Bash-Script in the "Executable"-Folder in the "client"-Folder
 - Open up a Terminal and execute "java -jar \<PathToFile>\client-1.0.0-shaded.jar"
-- [Mostly For Development] Open the "client"-Folder within the "client"-Folder as a Project using IntelliJ and press the "run"-Button
+- [Mostly For Development] Open the "client"-Folder within the "client"-Folder as a Project using IntelliJ and setup a run configuration
+for the client
