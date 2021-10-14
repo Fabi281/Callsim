@@ -18,8 +18,8 @@ If you do not already have an account you can create one (persistent) via the re
 
 To start the Server either:
 
-- Open the CMD-Script in the "Executable"-Folder in the "server"-Folder
-- Open the Bash-Script in the "Executable"-Folder in the "server"-Folder
+- Run the CMD-Script in the "Executable"-Folder in the "server"-Folder
+- Run the Bash-Script in the "Executable"-Folder in the "server"-Folder
 - Open up a Terminal and execute "java -jar \<PathToFile>\callsim-1.0.0.jar"
 - [Mostly For Development] Open the "server"-Folder as a Project using VS-Code and press the "run"-Button
 
@@ -27,8 +27,8 @@ To start the Server either:
 
 To start the client either:
 
-- Open the CMD-Script in the "Executable"-Folder in the "client"-Folder
-- Open the Bash-Script in the "Executable"-Folder in the "client"-Folder
+- Run the CMD-Script in the "Executable"-Folder in the "client"-Folder
+- Run the Bash-Script in the "Executable"-Folder in the "client"-Folder
 - Open up a Terminal and execute "java -jar \<PathToFile>\client-1.0.0-shaded.jar"
 - [Mostly For Development] Open the "client"-Folder within the "client"-Folder as a Project using IntelliJ and setup a run configuration
 for the client
