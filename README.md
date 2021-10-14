@@ -1,30 +1,32 @@
-# callsim
+# Callsim
 
-A repository for a highschool project.
+The application consists of two seperate programms.
 
-# Getting started
+1. The Server
+2. The Client
 
-To get started with VS Code, please make sure that you've followed along these steps:
+To run the entire application be sure to install an up-to-date
+JRE/JDK (tested with Version 16 and should be compatible with 11)
+and then start the server. If the server started successfully you 
+can start as many clients as you wish.
 
-- latest Java (JRE and JDK) installed
-- Maven installed
-- all the Java extensions recommended by VS Code installed (Debugger for Java, Java Test Runner, Maven for Java, Java Extension Pack, Project Manager for Java): VS Code prompts you on every start whether you want to install theses packages automatically
-- added JDK and Maven to PATH Variable: when located in your Program Files, add e.g. C:\Program Files\apache-maven-3.8.1\bin to PATH Environment Variable for Maven and C:\Program Files\Java\jdk1.8.0_291 as JAVA_HOME Environment var for Java JDK
+If you do not already have an account you can create one (persistent) via the register button. There are already a few users registered for test purposes. Feel free to use them aswell (Most of the time their password is also their name)
 
-# Server
+
+# How to start the server
 
 To start the Server either:
 
 - Open the CMD-Script in the "Executable"-Folder in the "server"-Folder
 - Open the Bash-Script in the "Executable"-Folder in the "server"-Folder
-- Double-Click the Server.jar in the "server"-Folder (Caution: This way the Server starts in the as a Background Task)
-- Open up a Terminal and execute "java -jar \<PathToFile>\Server.java"
+- Open up a Terminal and execute "java -jar \<PathToFile>\callsim-1.0.0.jar"
 - [Mostly For Development] Open the "server"-Folder as a Project using VS-Code and press the "run"-Button
 
-# Client
+# How to start the client
 
-To start the Client either:
+To start the client either:
 
-- [Mostly For Development] Open the "client"-Folder within the "client-Folder" as a Project using IntelliJ and press the "run"-Button
-
-Code Review, Usability and Executables pending
+- Open the CMD-Script in the "Executable"-Folder in the "client"-Folder
+- Open the Bash-Script in the "Executable"-Folder in the "client"-Folder
+- Open up a Terminal and execute "java -jar \<PathToFile>\client-1.0.0-shaded.jar"
+- [Mostly For Development] Open the "client"-Folder within the "client"-Folder as a Project using IntelliJ and press the "run"-Button
