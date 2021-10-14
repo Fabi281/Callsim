@@ -245,7 +245,15 @@ public class WebsocketClientEndpoint {
                 client.nwPage.log("User is offline");
                 client.popupMessage(jsonMessage.getString("Value"));
                 break;
+            case "CallFailed":
+                // Show a PopUp Message and set callPartnerUsername to null
 
+                // Debugging
+                System.out.println("case: CallFailed");
+                client.callPartnerUsername = null;
+                client.nwPage.log(jsonMessage.getString("Value"));
+                client.popupMessage(jsonMessage.getString("Value"));
+                break;
 
             default:
                 // Debugging
