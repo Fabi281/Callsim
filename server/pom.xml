@@ -8,11 +8,12 @@
 		<version>2.4.5</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>de.dhbw-heidenheim.informatik.assfalg</groupId>
-	<artifactId>personspring</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>personspring</name>
-	<description>Demo project mit der Klasse Person mit Spring Boot</description>
+	<groupId>de.dhbwheidenheim.informatik.callsim</groupId>
+	<artifactId>callsim</artifactId>
+	<version>1.0.0</version>
+	<name>callsim</name>
+	<packaging>jar</packaging>
+	<description>The server of the callsim application</description>
 	<properties>
 		<java.version>11</java.version>
 	</properties>
@@ -78,7 +79,6 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-
 	<build>
 		<plugins>
 			<plugin>
@@ -87,5 +87,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
 </project>
